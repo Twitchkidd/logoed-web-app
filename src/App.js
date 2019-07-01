@@ -1,26 +1,48 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect
+} from "react-router-dom";
+//import LandingPage from "./LandingPage";
+//import DashboardSite from "./DashboardSite";
+//import AdminSite from "./AdminSite"
+import WebApp from "./WebApp";
+import Loading from "./screens/Loading";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  state = {
+    business: null
+  };
+  handleSetBusiness = business => {
+    this.setState({ business });
+  };
+  render() {
+    return (
+      <Router>
+        {this.state.business ? (
+          <Route
+            exact
+            path='/App'
+            render={props => (
+              <WebApp {...props} business={this.state.business} />
+            )}
+          />
+        ) : (
+          <Switch>
+            <Route
+              path='/App/:Business'
+              render={props => (
+                <Loading {...props} setBusiness={this.handleSetBusiness} />
+              )}
+            />
+            <Redirect to='/App/Test' />
+          </Switch>
+        )}
+      </Router>
+    );
+  }
 }
 
 export default App;
