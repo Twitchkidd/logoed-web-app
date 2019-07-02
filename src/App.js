@@ -9,7 +9,8 @@ import {
 //import DashboardSite from "./DashboardSite";
 //import AdminSite from "./AdminSite"
 import WebApp from "./WebApp";
-import Loading from "./screens/Loading";
+import Loading from "./WebApp/screens/Loading";
+import Global from "./Global";
 
 class App extends Component {
   state = {
@@ -21,6 +22,7 @@ class App extends Component {
   render() {
     return (
       <Router>
+        <Global />
         {this.state.business ? (
           <Route
             exact
