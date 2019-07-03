@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Spinner from "react-spinkit";
 import { lightOrange } from "../../utilities";
 
@@ -31,7 +31,6 @@ class Loading extends Component {
         }
       }
       this.setState({ loading: false });
-      console.log(result);
       if (result) {
         setBusiness(result);
       }
