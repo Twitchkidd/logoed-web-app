@@ -5,9 +5,9 @@ import {
   Route,
   Redirect
 } from "react-router-dom";
-//import LandingPage from "./LandingPage";
-//import DashboardSite from "./DashboardSite";
-//import AdminSite from "./AdminSite"
+import LandingPage from "./LandingPage";
+import DashboardSite from "./DashboardSite";
+import AdminSite from "./AdminSite";
 import WebApp from "./WebApp";
 import Loading from "./WebApp/screens/Loading";
 import Global from "./Global";
@@ -39,7 +39,21 @@ class App extends Component {
                 <Loading {...props} setBusiness={this.handleSetBusiness} />
               )}
             />
-            <Redirect to='/App/Test' />
+            <Route
+              path='/App'
+              exact
+              render={props => (
+                <Loading
+                  {...props}
+                  setBusiness={this.handleSetBusiness}
+                  demo={true}
+                />
+              )}
+            />
+            <Route path='/Dashboard' component={DashboardSite} />
+            <Route path='/Admin' component={AdminSite} />
+            <Route exact path='/' component={LandingPage} />
+            <Redirect to='/' />
           </Switch>
         )}
       </Router>

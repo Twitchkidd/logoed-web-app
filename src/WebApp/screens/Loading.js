@@ -1,10 +1,12 @@
 import React, { Component } from "react";
-import { Redirect } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import Spinner from "react-spinkit";
+import { lightOrange } from "../../utilities";
 
 class Loading extends Component {
   state = {
-    loading: true
+    loading: true,
+    error: ""
   };
   checkMockServer = business => {
     const businesses = ["Burgerology", "Jonathans", "Leilu"];
@@ -14,19 +16,40 @@ class Loading extends Component {
       return "Error! Can't find business in Logoed database!";
     }
   };
-  render() {
-    const { match, setBusiness } = this.props;
-    if (match.params.Business) {
-      let checkReturn = this.checkMockServer(match.params.Business);
-      if (checkReturn === match.params.Business) {
-        setBusiness(match.params.Business);
-        return <Redirect to='/App' />;
+  handleRealOrDemo = () => {
+    setTimeout(() => {
+      const { match, setBusiness, demo } = this.props;
+      if (demo) {
+        setBusiness(`demo`);
       } else {
-        return <p>Error! Can't find business in Logoed database!</p>;
+        let checkReturn = this.checkMockServer(match.params.Business);
+        if (checkReturn === match.params.Business) {
+          setBusiness(match.params.Business);
+        } else {
+          this.setState({ error: "Business not in Logoed database!" });
+        }
       }
-    } else {
-      return <Redirect to='/App' />;
-    }
+      this.setState({ loading: false });
+    }, 2000);
+  };
+  componentDidMount() {
+    this.handleRealOrDemo();
+  }
+  render() {
+    return (
+      <div>
+        {this.state.loading ? (
+          <Spinner name='ball-zig-zag-deflect' color={lightOrange} />
+        ) : (
+          this.state.error && (
+            <p>
+              {this.state.error} Here's our <Link to='/'>homepage</Link> with
+              more info!
+            </p>
+          )
+        )}
+      </div>
+    );
   }
 }
 
