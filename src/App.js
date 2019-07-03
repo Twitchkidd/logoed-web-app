@@ -25,7 +25,6 @@ class App extends Component {
         <Global />
         {this.state.business ? (
           <Route
-            exact
             path='/App'
             render={props => (
               <WebApp {...props} business={this.state.business} />

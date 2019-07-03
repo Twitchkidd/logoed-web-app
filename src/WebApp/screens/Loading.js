@@ -17,19 +17,24 @@ class Loading extends Component {
     }
   };
   handleRealOrDemo = () => {
+    const { match, setBusiness, demo } = this.props;
+    let result = null;
     setTimeout(() => {
-      const { match, setBusiness, demo } = this.props;
       if (demo) {
-        setBusiness(`demo`);
+        result = "demo";
       } else {
         let checkReturn = this.checkMockServer(match.params.Business);
         if (checkReturn === match.params.Business) {
-          setBusiness(match.params.Business);
+          result = match.params.Business;
         } else {
           this.setState({ error: "Business not in Logoed database!" });
         }
       }
       this.setState({ loading: false });
+      console.log(result);
+      if (result) {
+        setBusiness(result);
+      }
     }, 2000);
   };
   componentDidMount() {
