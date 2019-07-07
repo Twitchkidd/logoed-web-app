@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import styled from "styled-components";
-import { lightOrange, darkOrange } from "../../utilities";
+import { GradientWrapper } from "../components";
 import logoedLogo from "../assets/logo-1x.png";
 
 const businesses = {
@@ -26,20 +25,11 @@ const businesses = {
   }
 };
 
-const WelcomeWrapper = styled.div`
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-image: linear-gradient(${lightOrange}, ${darkOrange});
-`;
-
 export default class Welcome extends Component {
   render() {
     const { business } = this.props;
     return (
-      <WelcomeWrapper>
+      <GradientWrapper>
         <img src={logoedLogo} alt='Logoed Logo' />
         <p>In partnership with:</p>
         <img
@@ -52,11 +42,10 @@ export default class Welcome extends Component {
         </p>
         <p>
           Snap a photo for your Instragram and put the Burgerology logo with on
-          it to enter to win a $50 gift card! More posts mean more chances to
-          win!
+          it to enter to win a $50 gift card!
         </p>
         <button onClick={() => console.log("boop!")}>I'm a button!</button>
-      </WelcomeWrapper>
+      </GradientWrapper>
     );
   }
 }

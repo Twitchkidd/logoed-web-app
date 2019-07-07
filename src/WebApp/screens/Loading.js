@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import { GradientWrapper } from "../components";
 import Spinner from "react-spinkit";
-import { lightOrange } from "../../utilities";
+import { maroon } from "../../utilities";
 
 class Loading extends Component {
   state = {
@@ -43,7 +44,9 @@ class Loading extends Component {
     return (
       <div>
         {this.state.loading ? (
-          <Spinner name='ball-zig-zag-deflect' color={lightOrange} />
+          <GradientWrapper>
+            <Spinner name='ball-zig-zag-deflect' color={maroon} />
+          </GradientWrapper>
         ) : (
           this.state.error && (
             <p>
