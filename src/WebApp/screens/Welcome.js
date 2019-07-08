@@ -27,7 +27,7 @@ const businesses = {
 
 export default class Welcome extends Component {
   render() {
-    const { business } = this.props;
+    const { business, initiateLogoing } = this.props;
     return (
       <GradientWrapper>
         <img src={logoedLogo} alt='Logoed Logo' />
@@ -44,7 +44,7 @@ export default class Welcome extends Component {
           Snap a photo for your Instragram and put the Burgerology logo with on
           it to enter to win a $50 gift card!
         </p>
-        <button onClick={() => console.log("boop!")}>I'm a button!</button>
+        <button onClick={() => initiateLogoing()}>I'm a button!</button>
       </GradientWrapper>
     );
   }
