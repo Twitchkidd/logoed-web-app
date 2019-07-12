@@ -8,6 +8,7 @@ const Wrapper = styled.div`
   height: 100vh;
 `;
 
+/*
 const Sidebar = styled.div`
   position: fixed;
   top: 0;
@@ -18,7 +19,7 @@ const Sidebar = styled.div`
   z-index: 1030;
   border-right: 1px solid #ddd;
 `;
-
+*/
 export default class DashboardSite extends Component {
   sendRequest = business => {
     axios({

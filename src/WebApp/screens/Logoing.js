@@ -32,20 +32,49 @@ const CameraButton = styled(Button)`
   height: 20vw;
   background-image: none;
   background-color: white;
-  ${fixedViewUnits({ x: 40, y: 85 })}
 `;
+/*
+  ${fixedViewUnits({ x: 40, y: 85 })}
 
+*/
 const CameraWrapper = styled.div`
   height: 100vh;
 `;
 
-const StyledVideo = styled.video`
+const VideoWrapper = styled.div`
+  position: relative;
   width: 100%;
+  height: ${props => props.videoWidth}px;
+  overflow: hidden;
+  &:before {
+    content: "";
+    position: absolute;
+    background: url(${props => props.businessLogo});
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
 `;
 
-const ShadowCanvas = styled.canvas`
-  display: none;
+const StyledVideo = styled.video`
+  display: inline-block;
+  vertical-align: top;
+  width: 100%;
+  object-fit: cover;
 `;
+
+/*
+var draggable = document.getElementById('draggable');
+ draggable.addEventListener('touchmove', function(event) {
+   var touch = event.targetTouches[0];
+
+   // Place element where the finger is
+   draggable.style.left = touch.pageX-25 + 'px';
+   draggable.style.top = touch.pageY-25 + 'px';
+   event.preventDefault();
+ }, false);
+ */
 
 export default class Logoing extends Component {
   constructor(props) {
@@ -54,54 +83,99 @@ export default class Logoing extends Component {
     this.canvas = createRef();
   }
   state = {
-    os: "",
-    playing: false
+    playing: false,
+    width: 0,
+    height: 0
   };
-  setCanvasSize = () => {
-    this.canvas.current.setAttribute(
-      "width",
-      this.video.current.getAttribute("width")
-    );
-    this.canvas.current.setAttribute(
-      "height",
-      this.video.current.getAttribute("height")
-    );
+  componentDidMount() {
+    this.launchPermissionPrompt();
+    console.log(businesses[this.props.business].name);
+  }
+  launchPermissionPrompt = () => {
+    let os;
+    if (navigator.vendor === "Apple Computer, Inc.") {
+      os = "ios";
+    } else if (navigator.vendor === "Google Inc.") {
+      os = "android";
+    } else {
+      console.log("uh-oh");
+    }
+    // Todo: return permission to parent component, build into the logic if you think it's Safari, add another button for go mode
+    navigator.mediaDevices
+      .getUserMedia({
+        video: {
+          width: {
+            min: 320,
+            ideal: 1280
+          },
+          facingMode: "environment"
+        }
+      })
+      .then(stream => {
+        this.video.current.srcObject = stream;
+        if (os === "android") {
+          this.video.current.play();
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        this.props.noPermission();
+      });
+    this.setState({
+      os: os,
+      width: this.video.current.offsetWidth,
+      height: this.video.current.offsetHeight
+    });
   };
+
   buttonFunction = () => {
     if (this.state.os === "ios" && this.state.playing === false) {
       this.video.current.play();
+      this.setState({ playing: true });
     } else {
       this.snapPhoto();
     }
   };
   snapPhoto = () => {
     console.log("boop!");
+    let context = this.canvas.current.getContext("2d");
+    context.drawImage(
+      this.video.current,
+      0,
+      0,
+      this.state.width,
+      this.state.height
+    );
+    let data = this.canvas.current.toDataURL("image/png");
+    console.log(data);
   };
-  launchPermissionPrompt = () => {
-    // Todo: return permission to parent component, build into the logic if you think it's Safari, add another button for go mode
-    if (navigator.mediaDevices.getUserMedia) {
-      this.setState({
-        os: "ios"
-      });
-      navigator.mediaDevices
-        .getUserMedia({
-          video: {
-            width: {
-              min: 320,
-              ideal: 1280
-            },
-            facingMode: "environment"
-          }
-        })
-        .then(stream => {
-          this.video.current.srcObject = stream;
-          this.setCanvasSize();
-        })
-        .catch(err => {
-          console.log(err);
-          this.props.noPermission();
-        });
-    } else {
+  render() {
+    console.log(this.state);
+    return (
+      <CameraWrapper>
+        <VideoWrapper
+          videoWidth={this.state.width}
+          businessLogo={businesses[this.props.business].logo}>
+          <StyledVideo ref={this.video} autoplay playsInline>
+            Video stream not yet available ...
+          </StyledVideo>
+        </VideoWrapper>
+        <CameraButton onClick={() => this.buttonFunction()} />
+        <canvas
+          ref={this.canvas}
+          style={{
+            width: `${this.state.width}px`,
+            height: `${this.state.height}px`,
+            display: "none"
+          }}
+        />
+      </CameraWrapper>
+    );
+  }
+}
+
+/*
+} else {
       this.setState({
         os: "android"
       });
@@ -109,30 +183,16 @@ export default class Logoing extends Component {
         { video: true },
         stream => {
           this.video.current.srcObject = stream;
-          this.setCanvasSize();
           this.video.current.play();
+          this.setCanvasSize();
         },
-        function() {
-          console.log("Webcam unavailable");
+        function(err) {
+          console.log(err);
+          this.props.noPermission();
         }
       );
     }
-  };
-  componentDidMount() {
-    this.launchPermissionPrompt();
-  }
-  render() {
-    return (
-      <CameraWrapper>
-        <StyledVideo ref={this.video} autoplay playsInline>
-          Video stream not yet available ...
-        </StyledVideo>
-        <CameraButton onClick={() => this.video.current.play()} />
-        <ShadowCanvas ref={this.canvas} />
-      </CameraWrapper>
-    );
-  }
-}
+    */
 
 /*
   launchPermissionPrompt = () => {
