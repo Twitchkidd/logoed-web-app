@@ -43,14 +43,46 @@ const StyledVideo = styled.video`
   width: 100%;
 `;
 
+const ShadowCanvas = styled.canvas`
+  display: none;
+`;
+
 export default class Logoing extends Component {
   constructor(props) {
     super(props);
     this.video = createRef();
+    this.canvas = createRef();
   }
+  state = {
+    os: "",
+    playing: false
+  };
+  setCanvasSize = () => {
+    this.canvas.current.setAttribute(
+      "width",
+      this.video.current.getAttribute("width")
+    );
+    this.canvas.current.setAttribute(
+      "height",
+      this.video.current.getAttribute("height")
+    );
+  };
+  buttonFunction = () => {
+    if (this.state.os === "ios" && this.state.playing === false) {
+      this.video.current.play();
+    } else {
+      this.snapPhoto();
+    }
+  };
+  snapPhoto = () => {
+    console.log("boop!");
+  };
   launchPermissionPrompt = () => {
     // Todo: return permission to parent component, build into the logic if you think it's Safari, add another button for go mode
     if (navigator.mediaDevices.getUserMedia) {
+      this.setState({
+        os: "ios"
+      });
       navigator.mediaDevices
         .getUserMedia({
           video: {
@@ -63,16 +95,21 @@ export default class Logoing extends Component {
         })
         .then(stream => {
           this.video.current.srcObject = stream;
+          this.setCanvasSize();
         })
         .catch(err => {
           console.log(err);
           this.props.noPermission();
         });
     } else {
+      this.setState({
+        os: "android"
+      });
       navigator.getUserMedia(
         { video: true },
         stream => {
           this.video.current.srcObject = stream;
+          this.setCanvasSize();
           this.video.current.play();
         },
         function() {
@@ -91,6 +128,7 @@ export default class Logoing extends Component {
           Video stream not yet available ...
         </StyledVideo>
         <CameraButton onClick={() => this.video.current.play()} />
+        <ShadowCanvas ref={this.canvas} />
       </CameraWrapper>
     );
   }
