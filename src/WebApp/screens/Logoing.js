@@ -1,7 +1,7 @@
 import React, { Component, createRef } from "react";
 import styled from "styled-components";
 import { Button } from "../components";
-import { fixedViewUnits } from "../../utilities";
+import { fixedViewUnits, lightOrange } from "../../utilities";
 
 const businesses = {
   Burgerology: {
@@ -39,6 +39,16 @@ const CameraButton = styled(Button)`
 */
 const CameraWrapper = styled.div`
   height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: space-between;
+`;
+
+const Header = styled.header`
+  width: 100%;
+  height: 42px;
+  background-color: ${lightOrange};
 `;
 
 const VideoWrapper = styled.div`
@@ -62,6 +72,15 @@ const StyledVideo = styled.video`
   vertical-align: top;
   width: 100%;
   object-fit: cover;
+`;
+
+const ActionBar = styled.div`
+  width: 100%;
+  height: 80px;
+  background-color: ${lightOrange};
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 /*
@@ -153,6 +172,7 @@ export default class Logoing extends Component {
     console.log(this.state);
     return (
       <CameraWrapper>
+        <Header />
         <VideoWrapper
           videoWidth={this.state.width}
           businessLogo={businesses[this.props.business].logo}>
@@ -160,7 +180,9 @@ export default class Logoing extends Component {
             Video stream not yet available ...
           </StyledVideo>
         </VideoWrapper>
-        <CameraButton onClick={() => this.buttonFunction()} />
+        <ActionBar>
+          <CameraButton onClick={() => this.buttonFunction()} />
+        </ActionBar>
         <canvas
           ref={this.canvas}
           style={{
