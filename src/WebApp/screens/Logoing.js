@@ -1,7 +1,8 @@
 import React, { Component, createRef } from "react";
+import { Helmet } from "react-helmet";
 import styled from "styled-components";
 import { Button } from "../components";
-import { fixedViewUnits, lightOrange } from "../../utilities";
+import { lightOrange } from "../../utilities";
 
 const businesses = {
   Burgerology: {
@@ -35,10 +36,12 @@ const CameraButton = styled(Button)`
 `;
 /*
   ${fixedViewUnits({ x: 40, y: 85 })}
-
 */
+
 const CameraWrapper = styled.div`
   height: 100vh;
+  position: relative;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -56,14 +59,19 @@ const VideoWrapper = styled.div`
   width: 100%;
   height: ${props => props.videoWidth}px;
   overflow: hidden;
+  touch-action: none;
   &:before {
     content: "";
     position: absolute;
-    background: url(${props => props.businessLogo});
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    transition: opacity 1.8s;
+    opacity: ${props => (props.ready ? 0.8 : 0.0)};
+    background: no-repeat url(${props => props.businessLogo});
+    background-size: ${props => props.videoWidth / 3}px;
+    border: ${props => (props.moving ? "solid red 2px" : null)};
+    top: ${props => props.logoTop}px;
+    right: ${props => props.logoRight}px;
+    bottom: ${props => props.logoBottom}px;
+    left: ${props => props.logoLeft}px;
   }
 `;
 
@@ -102,14 +110,25 @@ export default class Logoing extends Component {
     this.canvas = createRef();
   }
   state = {
+    ready: false,
     playing: false,
     width: 0,
-    height: 0
+    height: 0,
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0
   };
   componentDidMount() {
     this.launchPermissionPrompt();
     console.log(businesses[this.props.business].name);
+    window.scrollTo(0, 0);
   }
+  preventScroll = e => {
+    e.preventDefault();
+    e.stopPropagation();
+    window.scrollTo(0, 0);
+  };
   launchPermissionPrompt = () => {
     let os;
     if (navigator.vendor === "Apple Computer, Inc.") {
@@ -134,6 +153,9 @@ export default class Logoing extends Component {
         this.video.current.srcObject = stream;
         if (os === "android") {
           this.video.current.play();
+          this.setState({ ready: true, playing: true });
+        } else {
+          this.setState({ ready: true });
         }
       })
       .catch(err => {
@@ -146,14 +168,8 @@ export default class Logoing extends Component {
       height: this.video.current.offsetHeight
     });
   };
-
   buttonFunction = () => {
-    if (this.state.os === "ios" && this.state.playing === false) {
-      this.video.current.play();
-      this.setState({ playing: true });
-    } else {
-      this.snapPhoto();
-    }
+    this.snapPhoto();
   };
   snapPhoto = () => {
     console.log("boop!");
@@ -168,14 +184,69 @@ export default class Logoing extends Component {
     let data = this.canvas.current.toDataURL("image/png");
     console.log(data);
   };
+  handleTouchStart = e => {
+    e.preventDefault();
+    this.setState({
+      touched: true
+    });
+    if (this.state.playing === false) {
+      this.video.current.play();
+      this.setState({
+        playing: true
+      });
+    }
+  };
+  handleDrag = e => {
+    e.preventDefault();
+    this.setState({
+      top: Math.round(e.targetTouches[0].clientY),
+      right: Math.round(e.targetTouches[0].clientX),
+      bottom: Math.round(e.targetTouches[0].clientY),
+      left: Math.round(e.targetTouches[0].clientX)
+    });
+  };
+  handleTouchEnd = e => {
+    e.preventDefault();
+    this.setState({
+      touched: false
+    });
+  };
   render() {
     console.log(this.state);
+    const {
+      ready,
+      width,
+      height,
+      top,
+      right,
+      bottom,
+      left,
+      touched
+    } = this.state;
     return (
-      <CameraWrapper>
+      <CameraWrapper
+        onScroll={this.preventScroll}
+        onTouchMove={this.preventScroll}>
+        <Helmet>
+          <meta
+            name='viewport'
+            content='user-scalable=no, width=device-width, initial-scale=1.0'
+          />
+          <meta name='apple-mobile-web-app-capable' content='yes' />
+        </Helmet>
         <Header />
         <VideoWrapper
-          videoWidth={this.state.width}
-          businessLogo={businesses[this.props.business].logo}>
+          videoWidth={width}
+          businessLogo={businesses[this.props.business].logo}
+          ready={ready}
+          logoTop={top}
+          logoRight={right}
+          logoBottom={bottom}
+          logoLeft={left}
+          moving={touched}
+          onTouchStart={this.handleTouchStart}
+          onTouchMove={this.handleDrag}
+          onTouchEnd={this.handleTouchEnd}>
           <StyledVideo ref={this.video} autoplay playsInline>
             Video stream not yet available ...
           </StyledVideo>
@@ -186,8 +257,8 @@ export default class Logoing extends Component {
         <canvas
           ref={this.canvas}
           style={{
-            width: `${this.state.width}px`,
-            height: `${this.state.height}px`,
+            width: `${width}px`,
+            height: `${height}px`,
             display: "none"
           }}
         />

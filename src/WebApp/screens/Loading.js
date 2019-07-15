@@ -35,7 +35,7 @@ class Loading extends Component {
       if (result) {
         setBusiness(result);
       }
-    }, 2000);
+    }, 20);
   };
   componentDidMount() {
     this.handleRealOrDemo();
