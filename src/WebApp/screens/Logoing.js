@@ -64,10 +64,11 @@ const VideoWrapper = styled.div`
     content: "";
     position: absolute;
     transition: opacity 1.8s;
-    opacity: ${props => (props.ready ? 0.8 : 0.0)};
+    opacity: ${props => (props.ready ? (props.moving ? 1.0 : 0.6) : 0.0)};
     background: no-repeat url(${props => props.businessLogo});
     background-size: ${props => props.videoWidth / 3}px;
-    border: ${props => (props.moving ? "solid red 2px" : null)};
+    width: ${props => props.videoWidth / 3}px;
+    height: ${props => props.videoWidth / 3}px;
     top: ${props => props.logoTop}px;
     right: ${props => props.logoRight}px;
     bottom: ${props => props.logoBottom}px;
@@ -122,13 +123,15 @@ export default class Logoing extends Component {
   componentDidMount() {
     this.launchPermissionPrompt();
     console.log(businesses[this.props.business].name);
-    window.scrollTo(0, 0);
+    //window.scrollTo(0, 0);
   }
+  /*
   preventScroll = e => {
     e.preventDefault();
     e.stopPropagation();
     window.scrollTo(0, 0);
   };
+  */
   launchPermissionPrompt = () => {
     let os;
     if (navigator.vendor === "Apple Computer, Inc.") {
@@ -198,11 +201,13 @@ export default class Logoing extends Component {
   };
   handleDrag = e => {
     e.preventDefault();
+    const x = Math.round(e.targetTouches[0].clientX / 2);
+    const y = Math.round(e.targetTouches[0].clientY / 2);
     this.setState({
-      top: Math.round(e.targetTouches[0].clientY),
-      right: Math.round(e.targetTouches[0].clientX),
-      bottom: Math.round(e.targetTouches[0].clientY),
-      left: Math.round(e.targetTouches[0].clientX)
+      top: y,
+      right: x,
+      bottom: y,
+      left: x
     });
   };
   handleTouchEnd = e => {
@@ -225,8 +230,9 @@ export default class Logoing extends Component {
     } = this.state;
     return (
       <CameraWrapper
-        onScroll={this.preventScroll}
-        onTouchMove={this.preventScroll}>
+      /*onScroll={this.preventScroll}
+        onTouchMove={this.preventScroll}*/
+      >
         <Helmet>
           <meta
             name='viewport'
