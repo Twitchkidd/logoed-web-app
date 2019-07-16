@@ -1003,6 +1003,16 @@
   resolved "https://registry.yarnpkg.com/@csstools/normalize.css/-/normalize.css-9.0.1.tgz#c27b391d8457d1e893f1eddeaf5e5412d12ffbb5"
   integrity sha512-6It2EVfGskxZCQhuykrfnALg7oVeiI6KclWSmGDqB0AiInVrTGB9Jp9i4/Ad21u9Jde/voVQz6eFX/eSg/UsPA==
 
+"@daybrush/drag@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@daybrush/drag/-/drag-0.5.0.tgz#80c072fc5f491f19811cabd4c1033f64a45d147b"
+  integrity sha512-yEnrqyo3hnzltG/Nmc6pB3lCyvJK9vl6+JBaZYvtd9YIohLD628nn0sb0+XPbmmv6qJS9dnghNXPW9BtiKTKEA==
+
+"@daybrush/utils@^0.10.0":
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/@daybrush/utils/-/utils-0.10.0.tgz#a1463cb6c79c5affad9191f72c64785947b17257"
+  integrity sha512-Rwy4w0eLd6JwMNOQX7c6UQ3a4407wE3i6A1K4pXqcMJ2AJw/+t3XXpKkrIaSmFqtp0jwXFSxReyv4iV3wsq2vQ==
+
 "@emotion/is-prop-valid@^0.8.1":
   version "0.8.2"
   resolved "https://registry.yarnpkg.com/@emotion/is-prop-valid/-/is-prop-valid-0.8.2.tgz#b9692080da79041683021fcc32f96b40c54c59dc"
@@ -2654,7 +2664,7 @@ class-utils@^0.3.5:
     isobject "^3.0.0"
     static-extend "^0.1.1"
 
-classnames@^2.2.3:
+classnames@^2.2.3, classnames@^2.2.5:
   version "2.2.6"
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.6.tgz#43935bffdd291f326dad0a205309b38d00f650ce"
   integrity sha512-JR/iSQOSt+LQIWwrwEzJ9uk0xfN3mTVYMwt1Ir5mUcSN6pU+V4zQFFaJsclJbPuAUQH+yfWef6tm7l1quW3C8Q==
@@ -4395,6 +4405,11 @@ fragment-cache@^0.2.1:
   integrity sha1-QpD60n8T6Jvn8zeZxrxaCr//DRk=
   dependencies:
     map-cache "^0.2.2"
+
+framework-utils@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/framework-utils/-/framework-utils-0.1.0.tgz#3e3094e2944113bf4378f065437f6f3a0e62185e"
+  integrity sha512-4nR1kgwQNWrXXy5qVrvdnssgCJpMmxL6RePbljwnfQrwmdIQ4e/dPlv32WkJdRfFD8bh3AY5ucn565z3Oz7fhg==
 
 fresh@0.5.2:
   version "0.5.2"
@@ -8163,7 +8178,7 @@ prompts@^2.0.1:
     kleur "^3.0.2"
     sisteransi "^1.0.0"
 
-prop-types@^15.5.4, prop-types@^15.5.8:
+prop-types@^15.5.4, prop-types@^15.5.8, prop-types@^15.6.0:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -8346,6 +8361,13 @@ react-app-polyfill@^1.0.1:
     regenerator-runtime "0.13.2"
     whatwg-fetch "3.0.0"
 
+react-css-styler@^0.3.4:
+  version "0.3.4"
+  resolved "https://registry.yarnpkg.com/react-css-styler/-/react-css-styler-0.3.4.tgz#28418232620c00b0f0b6c609c908d4d6d1f5ea0c"
+  integrity sha512-hR5fSIDrOinlrjm9nErW3WRwPlcUAL2tp5/4kLHv+5EeK012Yz4WG1Uq0NUmELL+LlQ5mXjpya/eXk/IkGyBaA==
+  dependencies:
+    "@daybrush/utils" "^0.10.0"
+
 react-dev-utils@^9.0.1:
   version "9.0.1"
   resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-9.0.1.tgz#5c03d85a0b2537d0c46af7165c24a7dfb274bef2"
@@ -8387,6 +8409,14 @@ react-dom@^16.8.6:
     prop-types "^15.6.2"
     scheduler "^0.13.6"
 
+react-draggable@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/react-draggable/-/react-draggable-3.3.0.tgz#2ed7ea3f92e7d742d747f9e6324860606cd4d997"
+  integrity sha512-U7/jD0tAW4T0S7DCPK0kkKLyL0z61sC/eqU+NUfDjnq+JtBKaYKDHpsK2wazctiA4alEzCXUnzkREoxppOySVw==
+  dependencies:
+    classnames "^2.2.5"
+    prop-types "^15.6.0"
+
 react-error-overlay@^5.1.6:
   version "5.1.6"
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-5.1.6.tgz#0cd73407c5d141f9638ae1e0c63e7b2bf7e9929d"
@@ -8411,6 +8441,24 @@ react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.4:
   version "16.8.6"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.6.tgz#5bbc1e2d29141c9fbdfed456343fe2bc430a6a16"
   integrity sha512-aUk3bHfZ2bRSVFFbbeVS4i+lNPZr3/WM5jT2J5omUVV1zzcs1nAaf3l51ctA5FFvCRbhrH0bdAsRRQddFJZPtA==
+
+react-moveable@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/react-moveable/-/react-moveable-0.5.0.tgz#b8b81fd1ffdd6902e8f67ee53825db7b5856e3e1"
+  integrity sha512-UplwyirsfkAA/5gvVZh+5Uh+t/fJWSZtu2C9VMY0RAP7ZGloVqOXptvXjOMnwmAqflGEyWJ5axl5UbHqNpTcMQ==
+  dependencies:
+    "@daybrush/drag" "^0.5.0"
+    "@daybrush/utils" "^0.10.0"
+    framework-utils "^0.1.0"
+    react-css-styler "^0.3.4"
+    react-pure-props "^0.1.5"
+
+react-pure-props@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/react-pure-props/-/react-pure-props-0.1.5.tgz#f9d11255d4f52cba1c833d78e6f9b246a3a644db"
+  integrity sha512-U9meZmY0hf4tJVv4T6T7aP6Hfu4LCLddPZuBNiSuxmdz0RfiFxz6ly8rX83iRbGOf+XV6ltpzsJ27pNFwspRrQ==
+  dependencies:
+    shallowequal "^1.1.0"
 
 react-router-dom@^5.0.1:
   version "5.0.1"
@@ -9154,7 +9202,7 @@ shallow-clone@^1.0.0:
     kind-of "^5.0.0"
     mixin-object "^2.0.1"
 
-shallowequal@^1.0.1:
+shallowequal@^1.0.1, shallowequal@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/shallowequal/-/shallowequal-1.1.0.tgz#188d521de95b9087404fd4dcb68b13df0ae4e7f8"
   integrity sha512-y0m1JoUZSlPAjXVtPPW70aZWfIL/dSP7AFkRnniLCrK/8MDKog3TySTBmckD+RObVxH0v4Tox67+F14PdED2oQ==

@@ -3,6 +3,9 @@ import { Helmet } from "react-helmet";
 import styled from "styled-components";
 import { Button } from "../components";
 import { lightOrange } from "../../utilities";
+import Draggable from "react-draggable";
+
+var data;
 
 const businesses = {
   Burgerology: {
@@ -27,18 +30,7 @@ const businesses = {
   }
 };
 
-const CameraButton = styled(Button)`
-  border-radius: 50%;
-  width: 20vw;
-  height: 20vw;
-  background-image: none;
-  background-color: white;
-`;
-/*
-  ${fixedViewUnits({ x: 40, y: 85 })}
-*/
-
-const CameraWrapper = styled.div`
+const ScreenWrapper = styled.div`
   height: 100vh;
   position: relative;
   overflow: hidden;
@@ -56,31 +48,38 @@ const Header = styled.header`
 
 const VideoWrapper = styled.div`
   position: relative;
+  top: 0;
+  left: 0;
   width: 100%;
   height: ${props => props.videoWidth}px;
   overflow: hidden;
-  touch-action: none;
-  &:before {
-    content: "";
-    position: absolute;
-    transition: opacity 1.8s;
-    opacity: ${props => (props.ready ? (props.moving ? 1.0 : 0.6) : 0.0)};
-    background: no-repeat url(${props => props.businessLogo});
-    background-size: ${props => props.videoWidth / 3}px;
-    width: ${props => props.videoWidth / 3}px;
-    height: ${props => props.videoWidth / 3}px;
-    top: ${props => props.logoTop}px;
-    right: ${props => props.logoRight}px;
-    bottom: ${props => props.logoBottom}px;
-    left: ${props => props.logoLeft}px;
-  }
+  display: ${props => (props.hidden ? "none" : "block")};
 `;
 
-const StyledVideo = styled.video`
+const LogoWrapper = styled.div`
+  position: absolute;
+  z-index: 100;
+  top: ${props => props.logoTop}px;
+  right: ${props => props.logoRight}px;
+  bottom: ${props => props.logoBottom}px;
+  left: ${props => props.logoLeft}px;
+  width: ${props => Math.round(props.videoWidth / 3)}px;
+  height: ${props => Math.round(props.videoWidth / 3)}px;
+`;
+
+const Logo = styled.img`
+  position: absolute;
+  transition: opacity 1.8s;
+  opacity: ${props => (props.ready ? (props.moving ? 0.6 : 1.0) : 0.0)};
+  z-index: 8000;
+`;
+
+const Video = styled.video`
   display: inline-block;
   vertical-align: top;
   width: 100%;
   object-fit: cover;
+  z-index: 1;
 `;
 
 const ActionBar = styled.div`
@@ -92,23 +91,26 @@ const ActionBar = styled.div`
   justify-content: center;
 `;
 
-/*
-var draggable = document.getElementById('draggable');
- draggable.addEventListener('touchmove', function(event) {
-   var touch = event.targetTouches[0];
+const CameraButton = styled(Button)`
+  border-radius: 50%;
+  width: 20vw;
+  height: 20vw;
+  background-image: none;
+  background-color: white;
+`;
 
-   // Place element where the finger is
-   draggable.style.left = touch.pageX-25 + 'px';
-   draggable.style.top = touch.pageY-25 + 'px';
-   event.preventDefault();
- }, false);
- */
+const Image = styled.img`
+  display: ${props => (props.show ? "block" : "none")};
+  width: ${props => props.videoWidth}px;
+  height: ${props => props.videoWidth}px;
+`;
 
 export default class Logoing extends Component {
   constructor(props) {
     super(props);
     this.video = createRef();
     this.canvas = createRef();
+    this.logo = createRef();
   }
   state = {
     ready: false,
@@ -118,7 +120,8 @@ export default class Logoing extends Component {
     top: 0,
     right: 0,
     bottom: 0,
-    left: 0
+    left: 0,
+    snapped: false
   };
   componentDidMount() {
     this.launchPermissionPrompt();
@@ -184,8 +187,16 @@ export default class Logoing extends Component {
       this.state.width,
       this.state.height
     );
-    let data = this.canvas.current.toDataURL("image/png");
-    console.log(data);
+    console.log(this.logo.current);
+    context.drawImage(
+      this.logo.current,
+      this.state.right,
+      this.state.top,
+      this.state.width / 3,
+      this.state.width / 3
+    );
+    data = this.canvas.current.toDataURL("image/png");
+    this.setState({ snapped: true });
   };
   handleTouchStart = e => {
     e.preventDefault();
@@ -199,25 +210,22 @@ export default class Logoing extends Component {
       });
     }
   };
-  handleDrag = e => {
-    e.preventDefault();
-    const x = Math.round(e.targetTouches[0].clientX / 2);
-    const y = Math.round(e.targetTouches[0].clientY / 2);
-    this.setState({
-      top: y,
-      right: x,
-      bottom: y,
-      left: x
-    });
-  };
   handleTouchEnd = e => {
     e.preventDefault();
     this.setState({
       touched: false
     });
   };
+  handleStart = () => {
+    console.log("handle start!");
+  };
+  handleDrag = () => {
+    console.log("handle drag!");
+  };
+  handleStop = () => {
+    console.log("handle stop!");
+  };
   render() {
-    console.log(this.state);
     const {
       ready,
       width,
@@ -228,11 +236,9 @@ export default class Logoing extends Component {
       left,
       touched
     } = this.state;
+    const squareLogoSize = `${Math.round(width / 3)}px`;
     return (
-      <CameraWrapper
-      /*onScroll={this.preventScroll}
-        onTouchMove={this.preventScroll}*/
-      >
+      <ScreenWrapper>
         <Helmet>
           <meta
             name='viewport'
@@ -242,21 +248,40 @@ export default class Logoing extends Component {
         </Helmet>
         <Header />
         <VideoWrapper
+          hidden={this.state.snapped}
           videoWidth={width}
-          businessLogo={businesses[this.props.business].logo}
-          ready={ready}
-          logoTop={top}
-          logoRight={right}
-          logoBottom={bottom}
-          logoLeft={left}
-          moving={touched}
           onTouchStart={this.handleTouchStart}
           onTouchMove={this.handleDrag}
           onTouchEnd={this.handleTouchEnd}>
-          <StyledVideo ref={this.video} autoplay playsInline>
+          <Draggable
+            handle='.logo'
+            position={null}
+            scale={1}
+            onStart={this.handleStart}
+            onDrag={this.handleDrag}
+            onStop={this.handleStop}>
+            <div className='logo'>
+              <Logo
+                ref={this.logo}
+                src={businesses[this.props.business].logo}
+                alt='Businesses logo'
+                ready={ready}
+                moving={touched}
+                width={squareLogoSize}
+                height={squareLogoSize}
+              />
+            </div>
+          </Draggable>
+          <Video ref={this.video} autoplay playsInline>
             Video stream not yet available ...
-          </StyledVideo>
+          </Video>
         </VideoWrapper>
+        <Image
+          show={this.state.snapped}
+          src={data}
+          alt='camera view plus logo'
+          videoWidth={width}
+        />
         <ActionBar>
           <CameraButton onClick={() => this.buttonFunction()} />
         </ActionBar>
@@ -264,11 +289,11 @@ export default class Logoing extends Component {
           ref={this.canvas}
           style={{
             width: `${width}px`,
-            height: `${height}px`,
+            height: `${width}px`,
             display: "none"
           }}
         />
-      </CameraWrapper>
+      </ScreenWrapper>
     );
   }
 }
@@ -357,3 +382,15 @@ export default class Logoing extends Component {
       });
   };
   */
+
+/*
+var draggable = document.getElementById('draggable');
+ draggable.addEventListener('touchmove', function(event) {
+   var touch = event.targetTouches[0];
+
+   // Place element where the finger is
+   draggable.style.left = touch.pageX-25 + 'px';
+   draggable.style.top = touch.pageY-25 + 'px';
+   event.preventDefault();
+ }, false);
+ */
