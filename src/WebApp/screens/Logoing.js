@@ -2,10 +2,12 @@ import React, { Component, createRef } from "react";
 import { Helmet } from "react-helmet";
 import styled from "styled-components";
 import { Button } from "../components";
-import { lightOrange } from "../../utilities";
-import Draggable from "react-draggable";
+import logoedLogo from "../assets/logo-1x.png";
+import { lightOrange, sans } from "../../utilities";
+import Moveable from "react-moveable";
 
 var data;
+var localMediaStream;
 
 const businesses = {
   Burgerology: {
@@ -32,39 +34,28 @@ const businesses = {
 
 const ScreenWrapper = styled.div`
   height: 100vh;
-  position: relative;
+  width: 100vw;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: space-between;
+  justify-content: flex-start;
+  align-items: stretch;
 `;
 
 const Header = styled.header`
-  width: 100%;
-  height: 42px;
+  height: 12vh;
   background-color: ${lightOrange};
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const VideoWrapper = styled.div`
   position: relative;
-  top: 0;
-  left: 0;
   width: 100%;
   height: ${props => props.videoWidth}px;
   overflow: hidden;
   display: ${props => (props.hidden ? "none" : "block")};
-`;
-
-const LogoWrapper = styled.div`
-  position: absolute;
-  z-index: 100;
-  top: ${props => props.logoTop}px;
-  right: ${props => props.logoRight}px;
-  bottom: ${props => props.logoBottom}px;
-  left: ${props => props.logoLeft}px;
-  width: ${props => Math.round(props.videoWidth / 3)}px;
-  height: ${props => Math.round(props.videoWidth / 3)}px;
 `;
 
 const Logo = styled.img`
@@ -83,15 +74,21 @@ const Video = styled.video`
 `;
 
 const ActionBar = styled.div`
-  width: 100%;
-  height: 80px;
+  flex: 1;
   background-color: ${lightOrange};
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
 `;
 
+const Instructions = styled.p`
+  ${sans};
+  color: white;
+  margin-top: calc(10vw + 8px);
+`;
+
 const CameraButton = styled(Button)`
+  margin-top: 16px;
   border-radius: 50%;
   width: 20vw;
   height: 20vw;
@@ -125,16 +122,7 @@ export default class Logoing extends Component {
   };
   componentDidMount() {
     this.launchPermissionPrompt();
-    console.log(businesses[this.props.business].name);
-    //window.scrollTo(0, 0);
   }
-  /*
-  preventScroll = e => {
-    e.preventDefault();
-    e.stopPropagation();
-    window.scrollTo(0, 0);
-  };
-  */
   launchPermissionPrompt = () => {
     let os;
     if (navigator.vendor === "Apple Computer, Inc.") {
@@ -144,18 +132,18 @@ export default class Logoing extends Component {
     } else {
       console.log("uh-oh");
     }
-    // Todo: return permission to parent component, build into the logic if you think it's Safari, add another button for go mode
     navigator.mediaDevices
       .getUserMedia({
         video: {
           width: {
-            min: 320,
+            min: 1080, // This is not the way.
             ideal: 1280
           },
           facingMode: "environment"
         }
       })
       .then(stream => {
+        localMediaStream = stream;
         this.video.current.srcObject = stream;
         if (os === "android") {
           this.video.current.play();
@@ -173,30 +161,35 @@ export default class Logoing extends Component {
       width: this.video.current.offsetWidth,
       height: this.video.current.offsetHeight
     });
-  };
-  buttonFunction = () => {
-    this.snapPhoto();
+    if (os === "ios") {
+      this.video.current.play();
+    }
   };
   snapPhoto = () => {
-    console.log("boop!");
     let context = this.canvas.current.getContext("2d");
+    context.canvas.width = this.state.width;
+    context.canvas.height = this.state.width;
     context.drawImage(
       this.video.current,
       0,
       0,
+      Math.round(this.state.width * 1.70048309),
+      Math.round(this.state.width * 1.70048309),
+      0,
+      0,
       this.state.width,
-      this.state.height
+      this.state.width
     );
-    console.log(this.logo.current);
     context.drawImage(
       this.logo.current,
-      this.state.right,
+      this.state.left,
       this.state.top,
       this.state.width / 3,
       this.state.width / 3
     );
     data = this.canvas.current.toDataURL("image/png");
     this.setState({ snapped: true });
+    localMediaStream.getVideoTracks()[0].stop();
   };
   handleTouchStart = e => {
     e.preventDefault();
@@ -210,32 +203,17 @@ export default class Logoing extends Component {
       });
     }
   };
+  handleDrag = () => {
+    console.log("handle drag!");
+  };
   handleTouchEnd = e => {
     e.preventDefault();
     this.setState({
       touched: false
     });
   };
-  handleStart = () => {
-    console.log("handle start!");
-  };
-  handleDrag = () => {
-    console.log("handle drag!");
-  };
-  handleStop = () => {
-    console.log("handle stop!");
-  };
   render() {
-    const {
-      ready,
-      width,
-      height,
-      top,
-      right,
-      bottom,
-      left,
-      touched
-    } = this.state;
+    const { ready, width, touched, snapped, playing } = this.state;
     const squareLogoSize = `${Math.round(width / 3)}px`;
     return (
       <ScreenWrapper>
@@ -246,44 +224,50 @@ export default class Logoing extends Component {
           />
           <meta name='apple-mobile-web-app-capable' content='yes' />
         </Helmet>
-        <Header />
+        <Moveable
+          target={document.querySelector(".logo")}
+          draggable={true}
+          onDrag={({ target, left, top }) => {
+            target.style.left = `${left}px`;
+            target.style.top = `${top}px`;
+            this.setState({ left, top });
+          }}
+        />
+        <Header>
+          <img src={logoedLogo} alt='Logoed Logo' style={{ height: "8vh" }} />
+        </Header>
         <VideoWrapper
-          hidden={this.state.snapped}
+          hidden={snapped}
           videoWidth={width}
           onTouchStart={this.handleTouchStart}
           onTouchMove={this.handleDrag}
           onTouchEnd={this.handleTouchEnd}>
-          <Draggable
-            handle='.logo'
-            position={null}
-            scale={1}
-            onStart={this.handleStart}
-            onDrag={this.handleDrag}
-            onStop={this.handleStop}>
-            <div className='logo'>
-              <Logo
-                ref={this.logo}
-                src={businesses[this.props.business].logo}
-                alt='Businesses logo'
-                ready={ready}
-                moving={touched}
-                width={squareLogoSize}
-                height={squareLogoSize}
-              />
-            </div>
-          </Draggable>
+          <Logo
+            ref={this.logo}
+            className='logo'
+            src={businesses[this.props.business].logo}
+            alt='Businesses logo'
+            ready={ready}
+            moving={touched}
+            width={squareLogoSize}
+            height={squareLogoSize}
+          />
           <Video ref={this.video} autoplay playsInline>
             Video stream not yet available ...
           </Video>
         </VideoWrapper>
         <Image
-          show={this.state.snapped}
+          show={snapped}
           src={data}
           alt='camera view plus logo'
           videoWidth={width}
         />
         <ActionBar>
-          <CameraButton onClick={() => this.buttonFunction()} />
+          {playing ? (
+            <CameraButton onClick={() => this.snapPhoto()} />
+          ) : (
+            <Instructions>Tap and drag to place logo!</Instructions>
+          )}
         </ActionBar>
         <canvas
           ref={this.canvas}

@@ -7,8 +7,9 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    height: 100%;
+    height: 100vh;
     overflow: hidden;
+    position: fixed;
   }
   *, *:before, *:after {
     box-sizing: inherit;
@@ -18,6 +19,10 @@ const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
     font-size: 16px;
+    position: fixed;
+  }
+  .moveable-control-box {
+    display: none !important;
   }
 `;
 

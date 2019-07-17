@@ -13,6 +13,6 @@ export const Button = styled.button`
 
 Button.Text = styled.span`
   font-family: ${sans};
-  font-size: 1.2em;
+  font-size: 1.125em;
   color: white;
 `;
