@@ -1,6 +1,6 @@
 // import React from "react";
 import styled from "styled-components";
-import { blue, mediumGray, sans } from "../../utilities";
+import { blue, mediumGray, sans, eigengrau } from "../../utilities";
 
 export const Button = styled.button`
   border-radius: ${props => (props.wide ? "8px" : "50%")};

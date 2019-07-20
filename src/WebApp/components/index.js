@@ -1,3 +1,3 @@
 export * from "./GradientWrapper";
 export * from "./Button";
-export * from "./Headings";
+export * from "./Type";

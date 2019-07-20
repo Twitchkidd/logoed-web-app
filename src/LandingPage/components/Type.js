@@ -32,6 +32,6 @@ export const H4 = styled.h4`
 export const P = styled.p`
   ${sans}
   color: ${props => (props.light ? mostlyWhite : eigengrau)};
-  font-size: 1rem;
+  font-size: 1em;
   line-height: 1.25em;
 `;
