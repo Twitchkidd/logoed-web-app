@@ -30,7 +30,11 @@ export default class Welcome extends Component {
     const { business, initiateLogoing } = this.props;
     return (
       <GradientWrapper>
-        <img src={logoedLogo} alt='Logoed Logo' style={{ marginTop: "1em", maxWidth: "90vw" }} />
+        <img
+          src={logoedLogo}
+          alt='Logoed Logo'
+          style={{ marginTop: "1em", maxWidth: "90vw" }}
+        />
         <H2 light>In partnership with:</H2>
         <img
           style={{ width: "200px", height: "200px" }}
@@ -38,15 +42,13 @@ export default class Welcome extends Component {
           alt={`${business} logo`}
         />
         <H2 light>{businesses[business].name}</H2>
-        <P light style={{ marginLeft: "5vw", marginRight: "5vw" }}>
-          Snap a photo for your Instragram and put the Burgerology logo with on
-          it to enter to win a $50 gift card!
+        <P light style={{ marginLeft: "15vw", marginRight: "15vw" }}>
+          Snap a photo for your Instragram and put the{" "}
+          {businesses[business].name} logo with on it to enter to win a $50 gift
+          card!
         </P>
-        <Button
-          wide
-          style={{ marginBottom: "20vw" }}
-          onClick={() => initiateLogoing()}>
-          <Button.Text>Logo(ed)!</Button.Text>
+        <Button wide absolute onClick={() => initiateLogoing()}>
+          <Button.Text style={{ zIndex: 2 }}>Logo(ed)!</Button.Text>
         </Button>
       </GradientWrapper>
     );

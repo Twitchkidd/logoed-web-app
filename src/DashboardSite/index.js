@@ -35,6 +35,8 @@ export default class DashboardSite extends Component {
   };
   render() {
     const businesses = ["Burgerology", "Jonathans", "Leilu"];
+    // ! Lol I just looked at how I structured that ... PUH-ROBABLY
+    // ! NOT HOW YOU'RE GOING TO WANT TO DO THAT IN PROD, LOL
     return (
       <Wrapper>
         <div onClick={() => this.boopMe()}>Dashboard site!</div>

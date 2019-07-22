@@ -9,9 +9,11 @@
     "react-dom": "^16.8.6",
     "react-helmet": "^5.2.1",
     "react-moveable": "^0.5.0",
+    "react-rough": "^2.0.0-beta.4",
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.0.1",
     "react-spinkit": "^3.0.0",
+    "roughjs": "^3.1.0",
     "styled-components": "^4.3.2"
   },
   "scripts": {

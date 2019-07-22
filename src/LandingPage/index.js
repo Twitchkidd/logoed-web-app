@@ -2,21 +2,21 @@ import React, { Component, Fragment } from "react";
 import styled, { css } from "styled-components";
 import logo from "./Logo228.png";
 import longLogo from "./LongLogo478.png";
-import { H1, P } from "./components";
+import { H1, P, Button } from "./components";
 
 const LandingGrid = styled.div`
-  height: 100%;
+  height: 100vh;
+  width: 100vw;
   display: grid;
   grid-template-columns: ${props =>
-    props.signUpMode ? "290px 1fr max(5vw) 1fr" : "repeat(3, auto)"};
-  grid-template-rows: ${props =>
-    props.signUpMode ? "1fr" : "repeat(3, auto)"};
+    props.signUpMode ? "290px 1fr 50vw 1fr" : "40vw 1fr 1fr"};
+  grid-template-rows: ${props => (props.signUpMode ? "1fr" : "33vh 33vh 34vh")};
 `;
 
 const BuffMcBigBox = styled.div`
-  grid-column: ${props => (props.signUpMode ? "1 / span 1" : "1 / span 2")};
+  grid-column: ${props => (props.signUpMode ? "1 / span 1" : "1 / span 1")};
   grid-row: ${props => (props.signUpMode ? "1 / span 1" : "2 / span 2")};
-  background-color: "#253047";
+  background-color: #253047;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -35,7 +35,7 @@ const Logo = styled.div`
           margin-top: 88px;
         `
       : css`
-          left: calc(33vw - 342px);
+          left: 20vw;
           top: -114px;
         `}
   z-index: 2;
@@ -48,7 +48,6 @@ const ContentWrapper = styled.main`
   flex-direction: column;
   justify-content: center;
   align-items: ${props => (props.signUpMode ? "flex-start" : "flex-end")};
-  padding-left: ${props => (props.signUpMode ? "2em" : null)};
 `;
 
 export default class LandingPage extends Component {
@@ -61,40 +60,49 @@ export default class LandingPage extends Component {
     });
   };
   submit = () => {
-    console.log('boop!');
-  }
+    console.log("boop!");
+  };
   render() {
     const { signUpModeGo } = this.state;
     return (
-      <LandingGrid>
+      <LandingGrid signUpMode={signUpModeGo}>
         <BuffMcBigBox signUpMode={signUpModeGo}>
           <Logo signUpMode={signUpModeGo}>
-            <img src={logo} alt='Logoed Logo' />
+            <img
+              src={logo}
+              style={{ height: "100%", width: "100%" }}
+              alt='Logoed Logo'
+            />
           </Logo>
         </BuffMcBigBox>
         <ContentWrapper signUpMode={signUpModeGo}>
           {signUpModeGo ? (
             <Fragment>
-              <img src={longLogo} alt="Logoed Logo" />
-              <H1>Welcome!</H1>
-              <P>Test!</P>
-              <P>Test!</P>
-              <P>Test!</P>
-              <Button onClick={() => this.submit()}>
-                <Button.Text>Boop!</Button.Text>
-              </Button>
+              <img src={longLogo} alt='Logoed Logo' />
+              <div style={{ paddingLeft: "2em" }}>
+                <H1>Welcome!</H1>
+                <P>Test!</P>
+                <P>Test!</P>
+                <P>Test!</P>
+                <Button onClick={() => this.submit()}>
+                  <Button.Text>Boop!</Button.Text>
+                </Button>
+              </div>
             </Fragment>
           ) : (
-            <H1>Logoed</H1>
-            <P>Make your advertizing hit home</P>
-            <P>With user generated content and</P>
-            <P>Level up your social media game, with Logoed</P>
-            <Button onClick={() => this.signUp()}>
-              <strong>
-                <Button.Text>Sign Up!</Button.Text>
-              </strong>
-            </Button>
-          }
+            <Fragment>
+              <H1>Logoed</H1>
+
+              <P>Make your advertizing hit home</P>
+              <P>With user generated content and</P>
+              <P>Level up your social media game, with Logoed</P>
+              <Button onClick={() => this.signUp()}>
+                <strong>
+                  <Button.Text>Sign Up!</Button.Text>
+                </strong>
+              </Button>
+            </Fragment>
+          )}
         </ContentWrapper>
       </LandingGrid>
     );
