@@ -9,14 +9,9 @@ class Loading extends Component {
     loading: true,
     error: ""
   };
-  checkMockServer = business => {
-    const businesses = ["Burgerology", "Jonathans", "Leilu"];
-    if (businesses.includes(business)) {
-      return business;
-    } else {
-      return "Error! Can't find business in Logoed database!";
-    }
-  };
+  componentDidMount() {
+    this.handleRealOrDemo();
+  }
   handleRealOrDemo = () => {
     const { match, setBusiness, demo } = this.props;
     let result = null;
@@ -35,11 +30,16 @@ class Loading extends Component {
       if (result) {
         setBusiness(result);
       }
-    }, 20);
+    }, 360);
   };
-  componentDidMount() {
-    this.handleRealOrDemo();
-  }
+  checkMockServer = business => {
+    const businesses = ["Burgerology", "Jonathans", "Leilu"];
+    if (businesses.includes(business)) {
+      return business;
+    } else {
+      return "Error! Can't find business in Logoed database!";
+    }
+  };
   render() {
     return (
       <div>
