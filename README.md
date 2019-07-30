@@ -45,3 +45,28 @@ Then we have a hundred lines of commented-out code ... let's see, I don't need t
 Logoing.js is doing pretty well, except that it needs the next large refactor, but that's pretty much written already. The mystery of the button in Welcome.js remains, however.
 
 I think I might just be getting grumpy because I haven't stood up in a bit, but WHAT SORT OF CRACK WAS I ON WHEN I WROTE THE BUTTON COMPONENT, lol. We'll get to this presently.
+
+## The Next Day! Two Days! Something!
+
+Okay, I think Logoing.js should really get a hit before I leave this to marinate, but the button, too, if I know that's something I'm going to have to fix right away, more or less.
+
+Right, then, Logoing.js first. This is the screen we hit after the Welcome screen, and it's where camera permission is asked for, we're shown the camera viewport, the logo, and instructions to tap and drag the logo until it's on the viewport, then the shutter appears where the instructions were, in it's standard place there. Oh, right, a heading in there, too. And Helmet.
+
+- ScreenWrapper
+- - Helmet
+- - Header
+- - VideoWrapper
+- - - Video
+- - - Logo
+- - Image
+- - ActionBar
+- - - Instructions
+- - - Shutter
+- - Canvas
+- - Moveable
+
+There are touch events on the VideoWrapper, and it's got a hidden prop, and the Logo is IN THERE, moveable by the Moveable component that snipes it out of the DOM somehow. The canvas component is required to blend the two images. The logic is kinda all over the place. I think the logo being a sibling of the video component is to make z-index work properly. I can see rendering a new logo alongside the Image, and if Moveable complains, what about rendering Moveable alongside them?
+
+Oh, the Button component we load in Welcome is adorable, it just shouldn't be called just button, cause there's a lot going on there. I think I just need to display: none something and get some css to represent it's state change, and hook it up to the custom touch events.
+
+Okay, when you're ready, when you get back, first thing is to get onClick() working on Button, and rename it, and then take a look at what's written in the native app for Logoing, what's written here, and uhh ... do the right thing, lol.
