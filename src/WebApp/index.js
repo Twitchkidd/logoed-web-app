@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-//import { Switch, Route } from "react-router-dom";
 import Welcome from "./screens/Welcome";
 import Logoing from "./screens/Logoing";
 
@@ -36,12 +35,3 @@ export default class WebApp extends Component {
     }
   }
 }
-
-/*
-  <Switch>
-    <Route
-      path='/App/Welcome'
-      render={props => <Welcome {...props} business={business} />}
-    />
-  </Switch>
-*/

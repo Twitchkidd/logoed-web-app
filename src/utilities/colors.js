@@ -2,6 +2,7 @@ export const lightOrange = "#F8814E";
 export const darkOrange = "#C6653D";
 export const mostlyWhite = "#FBFAFA";
 export const mediumGray = "#BBBBBB";
+export const grayGray = "#737373";
 export const blue = "#3B5998";
 export const darkBlue = "#253047";
 export const veryYellow = "#FFFF00";

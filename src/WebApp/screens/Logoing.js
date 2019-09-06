@@ -1,9 +1,21 @@
 import React, { Component, createRef } from "react";
 import { Helmet } from "react-helmet";
 import styled from "styled-components";
-import { Button } from "../components";
-import logoedLogo from "../assets/logo-1x.png";
-import { lightOrange, sans } from "../../utilities";
+import {
+  ActionBar,
+  BusinessLogo,
+  Button,
+  ButtonText,
+  Header,
+  Image,
+  InstructionalText,
+  LogoedLogoLongForm,
+  ScreenWrapper,
+  ShadowCanvas,
+  Video,
+  VideoWrapper
+} from "../components";
+import { sans } from "../../utilities";
 import Moveable from "react-moveable";
 
 var data;
@@ -32,61 +44,6 @@ const businesses = {
   }
 };
 
-const ScreenWrapper = styled.div`
-  height: 100vh;
-  width: 100vw;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: stretch;
-`;
-
-const Header = styled.header`
-  height: 12vh;
-  background-color: ${lightOrange};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const VideoWrapper = styled.div`
-  position: relative;
-  width: 100%;
-  height: ${props => props.videoWidth}px;
-  overflow: hidden;
-  display: ${props => (props.hidden ? "none" : "block")};
-`;
-
-const Logo = styled.img`
-  position: absolute;
-  transition: opacity 1.8s;
-  opacity: ${props => (props.ready ? (props.moving ? 0.6 : 1.0) : 0.0)};
-  z-index: 8000;
-`;
-
-const Video = styled.video`
-  display: inline-block;
-  vertical-align: top;
-  width: 100%;
-  object-fit: cover;
-  z-index: 1;
-`;
-
-const ActionBar = styled.div`
-  flex: 1;
-  background-color: ${lightOrange};
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-`;
-
-const Instructions = styled.p`
-  ${sans};
-  color: white;
-  margin-top: calc(10vw + 8px);
-`;
-
 const CameraButton = styled(Button)`
   margin-top: 16px;
   border-radius: 50%;
@@ -94,12 +51,6 @@ const CameraButton = styled(Button)`
   height: 20vw;
   background-image: none;
   background-color: white;
-`;
-
-const Image = styled.img`
-  display: ${props => (props.show ? "block" : "none")};
-  width: ${props => props.videoWidth}px;
-  height: ${props => props.videoWidth}px;
 `;
 
 export default class Logoing extends Component {
@@ -112,7 +63,6 @@ export default class Logoing extends Component {
   state = {
     ready: false,
     playing: false,
-    width: 0,
     height: 0,
     top: 0,
     right: 0,
@@ -157,35 +107,34 @@ export default class Logoing extends Component {
         this.props.noPermission();
       });
     this.setState({
-      os: os,
-      width: this.video.current.offsetWidth,
-      height: this.video.current.offsetHeight
+      os
     });
     if (os === "ios") {
       this.video.current.play();
     }
   };
   snapPhoto = () => {
+    const width = window.innerWidth;
     let context = this.canvas.current.getContext("2d");
-    context.canvas.width = this.state.width;
-    context.canvas.height = this.state.width;
+    context.canvas.width = width;
+    context.canvas.height = width;
     context.drawImage(
       this.video.current,
       0,
       0,
-      Math.round(this.state.width * 1.70048309),
-      Math.round(this.state.width * 1.70048309),
+      Math.round(width * 1.70048309),
+      Math.round(width * 1.70048309),
       0,
       0,
-      this.state.width,
-      this.state.width
+      width,
+      width
     );
     context.drawImage(
       this.logo.current,
       this.state.left,
       this.state.top,
-      this.state.width / 3,
-      this.state.width / 3
+      width * 0.31,
+      width * 0.31
     );
     data = this.canvas.current.toDataURL("image/png");
     this.setState({ snapped: true });
@@ -213,8 +162,8 @@ export default class Logoing extends Component {
     });
   };
   render() {
-    const { ready, width, touched, snapped, playing } = this.state;
-    const squareLogoSize = `${Math.round(width / 3)}px`;
+    const { ready, touched, snapped, playing } = this.state;
+    const width = window.innerWidth;
     return (
       <ScreenWrapper>
         <Helmet>
@@ -234,49 +183,35 @@ export default class Logoing extends Component {
           }}
         />
         <Header>
-          <img src={logoedLogo} alt='Logoed Logo' style={{ height: "8vh" }} />
+          <LogoedLogoLongForm header />
         </Header>
         <VideoWrapper
           hidden={snapped}
-          videoWidth={width}
           onTouchStart={this.handleTouchStart}
           onTouchMove={this.handleDrag}
           onTouchEnd={this.handleTouchEnd}>
-          <Logo
+          <BusinessLogo
             ref={this.logo}
             className='logo'
             src={businesses[this.props.business].logo}
             alt='Businesses logo'
-            ready={ready}
             moving={touched}
-            width={squareLogoSize}
-            height={squareLogoSize}
           />
           <Video ref={this.video} autoplay playsInline>
             Video stream not yet available ...
           </Video>
         </VideoWrapper>
-        <Image
-          show={snapped}
-          src={data}
-          alt='camera view plus logo'
-          videoWidth={width}
-        />
+        <Image show={snapped} src={data} alt='camera view plus logo' />
         <ActionBar>
           {playing ? (
             <CameraButton onClick={() => this.snapPhoto()} />
           ) : (
-            <Instructions>Tap and drag to place logo!</Instructions>
+            <InstructionalText style={{ marginTop: "calc(10vw + 8px)" }}>
+              Tap and drag to place logo!
+            </InstructionalText>
           )}
         </ActionBar>
-        <canvas
-          ref={this.canvas}
-          style={{
-            width: `${width}px`,
-            height: `${width}px`,
-            display: "none"
-          }}
-        />
+        <ShadowCanvas ref={this.canvas} />
       </ScreenWrapper>
     );
   }

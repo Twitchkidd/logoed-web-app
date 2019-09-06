@@ -1,5 +1,40 @@
 # Logoed!
 
+## Update: Revision 2
+
+Okay, so the last time I touched the README was July 30th, it's now September 6th ... wild.
+
+"I need this wild life, this freedom." ~Zane Grey
+
+So we're in the process of recomposing with our now much more complete list of components, and we'd decided to do the buttons last, because of the whole rough.js situation. So: - -
+
+- Extraction to components/
+- Layout
+- Images
+- Typography
+- Buttons
+
+Extracting to components/
+
+- ScreenWrapper
+- LogoedLogoLongForm
+- BusinessLogo (oh, getting this to workproperly for initial sizes/shapes of logos is going to be a thing.)
+- Header
+- ActionBar
+- Text (a, was Type, types are a thing though ... and b, encompassing button text and applying semantic labels)
+- VideoWrapper
+- Video
+- Image
+- ShadowCanvas
+
+just buttons now ... oh, jeez, this is sooo much better, lol.
+
+BIG TODO, the drawImage method in Logoing needs to reflect that the current logo for logoing is 31% of the view width.
+
+Okay, like 80 billion things are relying on video.current.offsetWidth, and forgive me, future self, if I'm fucking things up, but we're going to try for switching that out with a good solid set of 100vw's and \${window.innerWidth}px's
+
+TODO, test the global fixed positioning vs any nested elements with fixed positioning.
+
 ### Welcome to the Logoed Website and Webapp!
 
 I'm going us through the app and that's how I'm going to remember what I wrote two weeks ago, and solve the mystery of why the button isn't working, and many other mysteries and epic tasks, surely.

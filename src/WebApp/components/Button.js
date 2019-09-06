@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { blue, sans } from "../../utilities";
+import { blue, grayGray, eigengrau } from "../../utilities";
 import ReactRough, { Rectangle } from "react-rough";
 
 export class Button extends Component {
@@ -80,8 +80,4 @@ export class Button extends Component {
   }
 }
 
-Button.Text = styled.span`
-  font-family: ${sans};
-  font-size: 1.125em;
-  color: white;
-`;
+const
