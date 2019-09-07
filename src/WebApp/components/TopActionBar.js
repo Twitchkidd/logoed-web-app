@@ -1,10 +1,10 @@
 import styled from "styled-components";
 
-const ActionBar = styled.div`
+const TopActionBar = styled.div`
   flex: 1;
   display: flex;
   align-items: flex-start;
   justify-content: center;
 `;
 
-export default ActionBar;
+export default TopActionBar;

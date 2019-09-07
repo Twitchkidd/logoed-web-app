@@ -56,10 +56,8 @@ export default class Welcome extends Component {
           {businesses[business].name} logo with on it to enter to win a $50 gift
           card!
         </InformationalText>
-        <Button wide absolute onClick={() => initiateLogoing()}>
-          <ButtonText primary style={{ zIndex: 2 }}>
-            Got it!
-          </ButtonText>
+        <Button primary buttonMcBigHuge onClick={() => initiateLogoing()}>
+          <ButtonText primary>Got it!</ButtonText>
         </Button>
       </ScreenWrapper>
     );

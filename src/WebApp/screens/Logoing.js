@@ -2,16 +2,17 @@ import React, { Component, createRef } from "react";
 import { Helmet } from "react-helmet";
 import styled from "styled-components";
 import {
-  ActionBar,
+  BottomActionBar,
   BusinessLogo,
   Button,
   ButtonText,
   Header,
-  Image,
   InstructionalText,
   LogoedLogoLongForm,
   ScreenWrapper,
   ShadowCanvas,
+  Snapshot,
+  TopActionBar,
   Video,
   VideoWrapper
 } from "../components";
@@ -201,8 +202,13 @@ export default class Logoing extends Component {
             Video stream not yet available ...
           </Video>
         </VideoWrapper>
-        <Image show={snapped} src={data} alt='camera view plus logo' />
-        <ActionBar>
+        <Snapshot show={snapped} src={data} alt='camera view plus logo' />
+        <TopActionBar>
+          // I need a shadow element here, since the Logo is being placed
+          absolutely, I need the // text to react as if the Logo was next to it
+          though, and then we handle the user not // getting the logo to the
+          video element by everything bouncing back into place. // This is going
+          to be delightful.
           {playing ? (
             <CameraButton onClick={() => this.snapPhoto()} />
           ) : (
@@ -210,7 +216,12 @@ export default class Logoing extends Component {
               Tap and drag to place logo!
             </InstructionalText>
           )}
-        </ActionBar>
+        </TopActionBar>
+        <BottomActionBar>
+          <CameraRollButton></CameraRollButton>
+          <ShutterOrSecondaryButton></ShutterOrSecondaryButton>
+          <DisabledOrPrimaryButton></DisabledOrPrimaryButton>
+        </BottomActionBar>
         <ShadowCanvas ref={this.canvas} />
       </ScreenWrapper>
     );
