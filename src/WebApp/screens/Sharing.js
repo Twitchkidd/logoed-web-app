@@ -14,9 +14,13 @@ import {
   Button,
   ButtonText,
   InformationalText,
+  InstructionalText,
+  ToolTipText,
   ToSBar,
   ToSLink
 } from "../components";
+import ReactTooltip from "react-tooltip";
+import Modal from "react-modal";
 
 const businesses = {
   Burgerology: {
@@ -41,9 +45,30 @@ const businesses = {
   }
 };
 
+const customStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)"
+  }
+};
+
+Modal.setAppElement("#root");
+
 export default class Sharing extends Component {
+  state = {
+    isModalOpen: false
+  };
+  componentDidMount() {
+    this.toolTipFunctionPlease();
+    this.modalOpenFunctionPlease();
+  }
   render() {
     const { data, business } = this.props;
+    const { isModalOpen } = this.state;
     return (
       <ScreenWrapper>
         <Header>
@@ -52,7 +77,7 @@ export default class Sharing extends Component {
         <CardWrapper>
           <Card>
             <Image src={data} />
-            <InstagramTextWrapper>
+            <InstagramTextWrapper data-tip data-for='tooltip'>
               <InstagramHandleText>InstaYou</InstagramHandleText>
               <InstagramBodyText>Yum! Snapped a photo with</InstagramBodyText>
               <InstagramMentionsText>@logoedapp</InstagramMentionsText>
@@ -61,6 +86,16 @@ export default class Sharing extends Component {
                 {businesses[business].handle}
               </InstagramMentionsText>
             </InstagramTextWrapper>
+            <ReactTooltip
+              id='tooltip'
+              aria-haspopup='true'
+              type='light'
+              effect='solid'
+              role='information'
+              description='Caption copied to clipboard'
+              data-event='click'>
+              <TooltipText light>Caption copied to clipboard!</TooltipText>
+            </ReactTooltip>
           </Card>
         </CardWrapper>
         <SharingActionBar>
@@ -84,6 +119,21 @@ export default class Sharing extends Component {
         <ToSBar>
           <ToSLink>Terms of Service</ToSLink>
         </ToSBar>
+        <Modal
+          isOpen={isModalOpen}
+          onAfterOpen={this.makeButtonEnabledFunctionPlease}
+          onRequestClose={this.maybeCheckIfTheImageWasSavedYet}
+          style={customStyles}
+          contentLabel='Logoed Modal'>
+          <Image />
+          <InstructionalText></InstructionalText>
+          <Button
+            primary
+            buttonMcBigHuge
+            onClick={this.closeModalFunctionPlease}>
+            <ButtonText>Got it!</ButtonText>
+          </Button>
+        </Modal>
       </ScreenWrapper>
     );
   }

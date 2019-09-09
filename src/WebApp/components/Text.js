@@ -47,6 +47,8 @@ export const ButtonText = styled.span`
 `;
 // Was 1.125 as of Button.Text version ... checkPlz ...
 
+export const 
+
 export const ToSH1 = styled.h1`
   ${sans}
   color: ${props => (props.light ? mostlyWhite : eigengrau)};
@@ -73,4 +75,11 @@ export const ToSP = styled.p`
   color: ${props => (props.light ? mostlyWhite : eigengrau)};
   font-size: 1em;
   line-height: 1.25em;
+`;
+
+export const TooltipText = styled.p`
+  ${sans}
+  color: ${props => (props.light ? mostlyWhite : eigengrau)};
+  font-size: 1.125em;
+  line-height: 1.2em;
 `;
