@@ -7,6 +7,7 @@ export * from "./LogoedLogoLongForm";
 export * from "./RoughJSButton";
 export * from "./ScreenWrapper";
 export * from "./ShadowCanvas";
+export * from "./Shutter";
 export * from "./Snapshot";
 export * from "./Text";
 export * from "./TopActionBar";

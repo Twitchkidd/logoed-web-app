@@ -7,3 +7,5 @@ const CameraRollButton = styled.button`
   height: 64px;
   background: ${eigengrau};
 `;
+
+export default CameraRollButton;

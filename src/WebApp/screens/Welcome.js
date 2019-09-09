@@ -7,7 +7,9 @@ import {
   ButtonText,
   InformationalText,
   LogoedLogoLongForm,
-  PresentationalText
+  PresentationalText,
+  ToSBar,
+  ToSLink
 } from "../components";
 
 const businesses = {
@@ -59,6 +61,9 @@ export default class Welcome extends Component {
         <Button primary buttonMcBigHuge onClick={() => initiateLogoing()}>
           <ButtonText primary>Got it!</ButtonText>
         </Button>
+        <ToSBar>
+          <ToSLink>Terms of Service</ToSLink>
+        </ToSBar>
       </ScreenWrapper>
     );
   }

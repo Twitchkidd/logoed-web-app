@@ -11,15 +11,14 @@ import {
   LogoedLogoLongForm,
   ScreenWrapper,
   ShadowCanvas,
+  Shutter,
   Snapshot,
   TopActionBar,
   Video,
   VideoWrapper
 } from "../components";
-import { sans } from "../../utilities";
 import Moveable from "react-moveable";
 
-var data;
 var localMediaStream;
 
 const businesses = {
@@ -45,15 +44,6 @@ const businesses = {
   }
 };
 
-const CameraButton = styled(Button)`
-  margin-top: 16px;
-  border-radius: 50%;
-  width: 20vw;
-  height: 20vw;
-  background-image: none;
-  background-color: white;
-`;
-
 export default class Logoing extends Component {
   constructor(props) {
     super(props);
@@ -62,17 +52,29 @@ export default class Logoing extends Component {
     this.logo = createRef();
   }
   state = {
+    data: null,
+    back: false,
+    noCameraPermission: false,
     ready: false,
     playing: false,
+    snapped: false,
+    logoed: false,
     height: 0,
     top: 0,
     right: 0,
     bottom: 0,
-    left: 0,
-    snapped: false
+    left: 0
   };
   componentDidMount() {
-    this.launchPermissionPrompt();
+    if (this.props.data) {
+      this.setState({
+        data: this.props.data,
+        back: true
+      });
+      // Also extract the left, right pl ... oh, SHIT, I need the whole potato, the image, the base image, and the left-top coordinates ...
+    } else {
+      this.launchPermissionPrompt();
+    }
   }
   launchPermissionPrompt = () => {
     let os;
@@ -105,7 +107,7 @@ export default class Logoing extends Component {
       })
       .catch(err => {
         console.log(err);
-        this.props.noPermission();
+        this.setState({ noCameraPermission: true });
       });
     this.setState({
       os
@@ -114,7 +116,8 @@ export default class Logoing extends Component {
       this.video.current.play();
     }
   };
-  snapPhoto = () => {
+  snapPhoto = async () => {
+    const { left, top, data } = this.state;
     const width = window.innerWidth;
     let context = this.canvas.current.getContext("2d");
     context.canvas.width = width;
@@ -130,15 +133,13 @@ export default class Logoing extends Component {
       width,
       width
     );
-    context.drawImage(
-      this.logo.current,
-      this.state.left,
-      this.state.top,
-      width * 0.31,
-      width * 0.31
-    );
-    data = this.canvas.current.toDataURL("image/png");
-    this.setState({ snapped: true });
+    context.drawImage(this.logo.current, left, top, width * 0.31, width * 0.31);
+    // data = this.canvas.current.toDataURL("image/png");
+    //This was how I did it when data was a var outside the class. I probably just fucked this up.
+    this.setState({
+      snapped: true,
+      data: await this.canvas.current.toDataURL("image/png")
+    });
     localMediaStream.getVideoTracks()[0].stop();
   };
   handleTouchStart = e => {
@@ -154,16 +155,35 @@ export default class Logoing extends Component {
     }
   };
   handleDrag = () => {
+    // e.preventDefault(); ?
     console.log("handle drag!");
   };
   handleTouchEnd = e => {
+    // TODO Please write here whether the end state is within bounds, or however we do that check, and set this.state.logoed
     e.preventDefault();
     this.setState({
       touched: false
     });
   };
+  onCameraRoll = e => {
+    e.preventDefault();
+    // { Camera roll! }
+    // onFail IF noCameraPermission this.props.noPermissions()
+  };
+  handleShare = () => {
+    const { initiateSharing } = this.props;
+    const { data } = this.state;
+    initiateSharing(data);
+  };
   render() {
-    const { ready, touched, snapped, playing } = this.state;
+    const {
+      ready,
+      touched,
+      snapped,
+      playing,
+      logoed,
+      noCameraPermission
+    } = this.state;
     const width = window.innerWidth;
     return (
       <ScreenWrapper>
@@ -204,29 +224,78 @@ export default class Logoing extends Component {
         </VideoWrapper>
         <Snapshot show={snapped} src={data} alt='camera view plus logo' />
         <TopActionBar>
-          // I need a shadow element here, since the Logo is being placed
-          absolutely, I need the // text to react as if the Logo was next to it
-          though, and then we handle the user not // getting the logo to the
-          video element by everything bouncing back into place. // This is going
-          to be delightful.
-          {playing ? (
-            <CameraButton onClick={() => this.snapPhoto()} />
+          <PossibleShadowBoxWeHaventDecided></PossibleShadowBoxWeHaventDecided>
+          // Oh, boy, if I set instructions as an object with semantic keys, I
+          could make this a whole lot more readable ... do this in preparation
+          for the Great Back Button Adventure!
+          {logoed ? (
+            noCameraPermission ? (
+              <InstructionalText>
+                Ready! Adjust logo, upload new snapshot, or go to the next step!
+              </InstructionalText>
+            ) : (
+              <InstructionalText>
+                Ready! Adjust logo, retake snapshot, or go to the next step!
+              </InstructionalText>
+            )
+          ) : noCameraPermission ? (
+            <InstructionalText>
+              Upload a snapshot and tap and drag the logo into place!
+            </InstructionalText>
+          ) : snapped ? (
+            <InstructionalText>
+              Tap and drag the logo into place to go to the next step, or retake
+              snapshot!
+            </InstructionalText>
           ) : (
-            <InstructionalText style={{ marginTop: "calc(10vw + 8px)" }}>
-              Tap and drag to place logo!
+            <InstructionalText>
+              Take a snapshot and tap and drag the logo into place!
             </InstructionalText>
           )}
         </TopActionBar>
         <BottomActionBar>
-          <CameraRollButton></CameraRollButton>
-          <ShutterOrSecondaryButton></ShutterOrSecondaryButton>
-          <DisabledOrPrimaryButton></DisabledOrPrimaryButton>
+          <CameraRollButton onClick={() => this.onCameraRoll()} />
+          {snapped ? (
+            <Button secondary onClick={() => this.resetFunctionPlease()}>
+              <ButtonText secondary>Retake</ButtonText>
+            </Button>
+          ) : ready ? (
+            <Shutter onClick={() => this.snapPhoto()} />
+          ) : (
+            <Shutter disabled />
+          )}
+          {snapped ? (
+            <Button primary onClick={this.handleShare}>
+              <ButtonText primary>Ready!</ButtonText>
+            </Button>
+          ) : (
+            <Button disabled>
+              <ButtonText disabled>Ready!</ButtonText>
+            </Button>
+          )}
         </BottomActionBar>
         <ShadowCanvas ref={this.canvas} />
       </ScreenWrapper>
     );
   }
 }
+
+/*
+Okay maybe instead of a shadow element, handle it with the wrapper element. Still undecided.
+*******************************************
+I need a shadow element here, since the Logo is being placed
+absolutely, I need the // text to react as if the Logo was next to it
+though, and then we handle the user not // getting the logo to the
+video element by everything bouncing back into place. // This is going
+to be delightful.
+{playing ? (
+  <CameraButton onClick={() => this.snapPhoto()} />
+) : (
+  <InstructionalText style={{ marginTop: "calc(10vw + 8px)" }}>
+    Tap and drag to place logo!
+  </InstructionalText>
+)}
+*/
 
 /*
 } else {

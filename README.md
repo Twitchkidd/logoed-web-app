@@ -2,6 +2,114 @@
 
 ## Update: Revision 2
 
+2019-09-08
+
+Hi, okay, so the current task is to work on naming so I don't run into myself. I caught a whif of it when I had two `share()` functions that did different things on different screens, and I'm not super sure where my onShare's or handleShare's are or wtf, really. I was doing this on paper, this is far more suited to digital text though soooooooooooooooooooooooooooooo
+
+### _App_
+
+**state**
+
+- business
+
+### _Loading_
+
+**props**
+
+- business
+- setBusiness={this.handleSetBusiness}
+
+**state**
+
+- loading
+- error
+
+### _index_
+
+**props**
+
+- business
+
+**state**
+
+- data
+- screen
+
+### _Welcome_
+
+**props**
+
+- business
+- initiateLogoing={this.handleInitiateLogoing}
+
+**state**
+
+none
+
+**ButtonMcBigHuge**
+
+onClick={() => this.props.initiateLogoing()}
+
+### _Logoing_
+
+**props**
+
+- data
+- business
+- noPermissions={this.handleNoPermissions}
+- share={data => this.handleShare(data)} NOOOOOOO THIS IS WRONG, RIGHT?
+
+**state**
+
+- data
+- back
+- noCameraPermission
+- ready
+- playing
+- snapped
+- logoed
+- height
+- top
+- right
+- bottom
+- left
+
+Oh, my goodness.
+
+**CameraRollButton**
+
+onClick={() => this.onCameraRoll()}
+
+**ReadyButton**
+
+onClick={() => this.onShare()}
+
+OKAY IGNORE ALL THAT, GOT IT FIGURED OUT!!!
+
+//
+
+Oh, wow, okay, so here's what I was missing. This is called 'class field(s) syntax':
+
+```
+  handleClick = () => {
+    // ...
+  }
+```
+
+and ... and I'm still not sure what the right way to pass arguments to event handlers is.
+
+Might even be:
+
+```
+  const clickMe = (parameter) => (event) => {
+    // ...
+  }
+
+  onClick={clickMe(parameter)}
+```
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
 Okay, so the last time I touched the README was July 30th, it's now September 6th ... wild.
 
 "I need this wild life, this freedom." ~Zane Grey
@@ -34,6 +142,8 @@ BIG TODO, the drawImage method in Logoing needs to reflect that the current logo
 Okay, like 80 billion things are relying on video.current.offsetWidth, and forgive me, future self, if I'm fucking things up, but we're going to try for switching that out with a good solid set of 100vw's and \${window.innerWidth}px's
 
 TODO, test the global fixed positioning vs any nested elements with fixed positioning.
+
+/// DAY 2 OF REVISION 2 CODING! SO MUCH! SO MUCH!
 
 ### Welcome to the Logoed Website and Webapp!
 
