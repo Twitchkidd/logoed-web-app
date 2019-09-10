@@ -21,6 +21,7 @@ export default class WebApp extends Component {
       screen: "Sharing"
     });
   };
+
   render() {
     const { data, business } = this.props;
     if (this.state.screen === "Welcome") {
