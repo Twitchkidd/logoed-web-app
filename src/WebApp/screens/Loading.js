@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { GradientWrapper } from "../components";
+import { ScreenWrapper } from "../components";
 import Spinner from "react-spinkit";
 import { maroon } from "../../utilities";
 
@@ -44,9 +44,9 @@ class Loading extends Component {
     return (
       <div>
         {this.state.loading ? (
-          <GradientWrapper>
+          <ScreenWrapper>
             <Spinner name='ball-zig-zag-deflect' color={maroon} />
-          </GradientWrapper>
+          </ScreenWrapper>
         ) : (
           this.state.error && (
             <p>
