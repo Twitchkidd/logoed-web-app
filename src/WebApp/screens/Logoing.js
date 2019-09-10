@@ -6,9 +6,11 @@ import {
   BusinessLogo,
   Button,
   ButtonText,
+  CameraRollButton,
   Header,
   InstructionalText,
   LogoedLogoLongForm,
+  PossibleShadowBoxWeHaventDecided,
   ScreenWrapper,
   ShadowCanvas,
   Shutter,
@@ -18,6 +20,7 @@ import {
   VideoWrapper
 } from "../components";
 import Moveable from "react-moveable";
+import logoedLogo from "../assets/logo-1x.png";
 
 var localMediaStream;
 
@@ -177,6 +180,7 @@ export default class Logoing extends Component {
   };
   render() {
     const {
+      data,
       ready,
       touched,
       snapped,
@@ -204,7 +208,7 @@ export default class Logoing extends Component {
           }}
         />
         <Header>
-          <LogoedLogoLongForm header />
+          <LogoedLogoLongForm src={logoedLogo} alt='Logoed Logo' header />
         </Header>
         <VideoWrapper
           hidden={snapped}
@@ -225,9 +229,6 @@ export default class Logoing extends Component {
         <Snapshot show={snapped} src={data} alt='camera view plus logo' />
         <TopActionBar>
           <PossibleShadowBoxWeHaventDecided></PossibleShadowBoxWeHaventDecided>
-          // Oh, boy, if I set instructions as an object with semantic keys, I
-          could make this a whole lot more readable ... do this in preparation
-          for the Great Back Button Adventure!
           {logoed ? (
             noCameraPermission ? (
               <InstructionalText>

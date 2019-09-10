@@ -7,20 +7,19 @@ import {
   Card,
   Image,
   InstagramTextWrapper,
-  InstagramHandleText,
-  InstagramBodyText,
-  InstagramMentionsText,
   SharingActionBar,
   Button,
   ButtonText,
   InformationalText,
+  InstagramText,
   InstructionalText,
-  ToolTipText,
+  TooltipText,
   ToSBar,
   ToSLink
 } from "../components";
 import ReactTooltip from "react-tooltip";
 import Modal from "react-modal";
+import logoedLogo from "../assets/logo-1x.png";
 
 const businesses = {
   Burgerology: {
@@ -60,7 +59,8 @@ Modal.setAppElement("#root");
 
 export default class Sharing extends Component {
   state = {
-    isModalOpen: false
+    isModalOpen: false,
+    ready: "WTF IS THIS"
   };
   componentDidMount() {
     this.toolTipFunctionPlease();
@@ -68,23 +68,23 @@ export default class Sharing extends Component {
   }
   render() {
     const { data, business } = this.props;
-    const { isModalOpen } = this.state;
+    const { isModalOpen, ready } = this.state;
     return (
       <ScreenWrapper>
         <Header>
-          <LogoedLogoLongForm header />
+          <LogoedLogoLongForm src={logoedLogo} alt='Logoed Logo' header />
         </Header>
         <CardWrapper>
           <Card>
             <Image src={data} />
             <InstagramTextWrapper data-tip data-for='tooltip'>
-              <InstagramHandleText>InstaYou</InstagramHandleText>
-              <InstagramBodyText>Yum! Snapped a photo with</InstagramBodyText>
-              <InstagramMentionsText>@logoedapp</InstagramMentionsText>
-              <InstagramBodyText>at</InstagramBodyText>
-              <InstagramMentionsText>
+              <InstagramText handle>InstaYou</InstagramText>
+              <InstagramText>Yum! Snapped a photo with</InstagramText>
+              <InstagramText atMention>@logoedapp</InstagramText>
+              <InstagramText>at</InstagramText>
+              <InstagramText atMention>
                 {businesses[business].handle}
-              </InstagramMentionsText>
+              </InstagramText>
             </InstagramTextWrapper>
             <ReactTooltip
               id='tooltip'
@@ -126,7 +126,7 @@ export default class Sharing extends Component {
           style={customStyles}
           contentLabel='Logoed Modal'>
           <Image />
-          <InstructionalText></InstructionalText>
+          <InstructionalText>fgdxgchjb,</InstructionalText>
           <Button
             primary
             buttonMcBigHuge

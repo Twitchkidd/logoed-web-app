@@ -16,11 +16,9 @@ const actionBarMixin = css`
   ${elevation[1]};
 `;
 
-const BusinessLogo = styled.img`
+export const BusinessLogo = styled.img`
   width: 65vw;
   height: 65vw;
   ${props => (props.logoing ? logoingMixin : null)}
   ${props => (props.actionBar ? actionBarMixin : null)}
 `;
-
-export default BusinessLogo;

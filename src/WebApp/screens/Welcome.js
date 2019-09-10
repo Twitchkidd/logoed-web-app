@@ -11,6 +11,7 @@ import {
   ToSBar,
   ToSLink
 } from "../components";
+import logoedLogo from "../assets/logo-1x.png";
 
 const businesses = {
   Burgerology: {
@@ -40,7 +41,7 @@ export default class Welcome extends Component {
     const { business, initiateLogoing } = this.props;
     return (
       <ScreenWrapper gradient>
-        <LogoedLogoLongForm />
+        <LogoedLogoLongForm src={logoedLogo} alt='Logoed Logo' />
         <BiggerPresentationalText light>
           In partnership with:
         </BiggerPresentationalText>

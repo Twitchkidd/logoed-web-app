@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { eigengrau, grayGray, maroon } from "../../utilities";
 
-const Shutter = styled.button`
+export const Shutter = styled.button`
   display: inline-block;
   width: ${props => (props.pushed ? `68px` : `64px`)};
   height: ${props => (props.pushed ? `68px` : `64px`)};
@@ -11,7 +11,4 @@ const Shutter = styled.button`
   background: ${props => (props.disabled ? grayGray : maroon)};
 `;
 
-export default Shutter;
-
 // TODO easing function, transition, padding? Will that give it the feel of a shutter?
-// I need to compose, lol. Go go go
