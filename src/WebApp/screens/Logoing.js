@@ -1,6 +1,5 @@
 import React, { Component, createRef } from "react";
 import { Helmet } from "react-helmet";
-import styled from "styled-components";
 import {
   BottomActionBar,
   BusinessLogo,
@@ -21,8 +20,6 @@ import {
 } from "../components";
 import Moveable from "react-moveable";
 import logoedLogo from "../assets/logo-1x.png";
-
-var localMediaStream;
 
 const businesses = {
   Burgerology: {
@@ -62,11 +59,14 @@ export default class Logoing extends Component {
     playing: false,
     snapped: false,
     logoed: false,
+    uploaded: false,
+    photo: null,
     height: 0,
     top: 0,
-    right: 0,
-    bottom: 0,
-    left: 0
+    left: 0,
+    os: null,
+    stream: null,
+    isImageSet: false
   };
   componentDidMount() {
     if (this.props.data) {
@@ -74,12 +74,11 @@ export default class Logoing extends Component {
         data: this.props.data,
         back: true
       });
-      // Also extract the left, right pl ... oh, SHIT, I need the whole potato, the image, the base image, and the left-top coordinates ...
     } else {
-      this.launchPermissionPrompt();
+      this.startCamera();
     }
   }
-  launchPermissionPrompt = () => {
+  startCamera = () => {
     let os;
     if (navigator.vendor === "Apple Computer, Inc.") {
       os = "ios";
@@ -99,28 +98,17 @@ export default class Logoing extends Component {
         }
       })
       .then(stream => {
-        localMediaStream = stream;
         this.video.current.srcObject = stream;
-        if (os === "android") {
-          this.video.current.play();
-          this.setState({ ready: true, playing: true });
-        } else {
-          this.setState({ ready: true });
-        }
+        this.video.current.play();
+        this.setState({ ready: true, playing: true, os, stream });
       })
       .catch(err => {
         console.log(err);
         this.setState({ noCameraPermission: true });
       });
-    this.setState({
-      os
-    });
-    if (os === "ios") {
-      this.video.current.play();
-    }
   };
-  snapPhoto = async () => {
-    const { left, top, data } = this.state;
+  snapPhoto = () => {
+    const { left, top } = this.state;
     const width = window.innerWidth;
     let context = this.canvas.current.getContext("2d");
     context.canvas.width = width;
@@ -137,15 +125,58 @@ export default class Logoing extends Component {
       width
     );
     context.drawImage(this.logo.current, left, top, width * 0.31, width * 0.31);
-    // data = this.canvas.current.toDataURL("image/png");
-    //This was how I did it when data was a var outside the class. I probably just fucked this up.
-    this.setState({
-      snapped: true,
-      data: await this.canvas.current.toDataURL("image/png")
-    });
-    localMediaStream.getVideoTracks()[0].stop();
+    let photo = this.canvas.current.toDataURL("image/png");
+    this.setImage(photo, "snapped");
   };
-  handleTouchStart = e => {
+  onUpload = e => {
+    const { photo } = this.state;
+    let setImage = this.setImage;
+    let file = e.target.files[0];
+    if (file) {
+      if (photo) {
+        let isReplacePhotoConfirmed = window.confirm("Replace photo?");
+        if (!isReplacePhotoConfirmed) {
+          return;
+        }
+      }
+      let reader = new FileReader();
+      reader.onloadend = function(e) {
+        setImage(e.target.result, "uploaded");
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+  setImage = (img, source) => {
+    const { stream } = this.state;
+    if (source === "uploaded") {
+      this.setState({
+        uploaded: true,
+        snapped: false,
+        photo: img,
+        isImageSet: true
+      });
+      stream.getVideoTracks()[0].stop();
+    } else if (source === "snapped") {
+      this.setState({
+        uploaded: false,
+        snapped: true,
+        photo: img,
+        isImageSet: true
+      });
+      stream.getVideoTracks()[0].stop();
+    } else {
+      console.log("setImage called without proper source");
+    }
+  };
+  resetImage = () => {
+    const { stream } = this.state;
+    this.setState({
+      isImageSet: false,
+      photo: null
+    });
+    this.startCamera();
+  };
+  onTouchStart = e => {
     e.preventDefault();
     this.setState({
       touched: true
@@ -157,21 +188,17 @@ export default class Logoing extends Component {
       });
     }
   };
-  handleDrag = () => {
+  onDrag = () => {
     // e.preventDefault(); ?
     console.log("handle drag!");
   };
-  handleTouchEnd = e => {
+  onTouchEnd = e => {
     // TODO Please write here whether the end state is within bounds, or however we do that check, and set this.state.logoed
     e.preventDefault();
+    console.log(e);
     this.setState({
       touched: false
     });
-  };
-  onCameraRoll = e => {
-    e.preventDefault();
-    // { Camera roll! }
-    // onFail IF noCameraPermission this.props.noPermissions()
   };
   handleShare = () => {
     const { initiateSharing } = this.props;
@@ -186,7 +213,10 @@ export default class Logoing extends Component {
       snapped,
       playing,
       logoed,
-      noCameraPermission
+      uploaded,
+      noCameraPermission,
+      photo,
+      isImageSet
     } = this.state;
     const width = window.innerWidth;
     return (
@@ -202,6 +232,7 @@ export default class Logoing extends Component {
           target={document.querySelector(".logo")}
           draggable={true}
           onDrag={({ target, left, top }) => {
+            console.log(target);
             target.style.left = `${left}px`;
             target.style.top = `${top}px`;
             this.setState({ left, top });
@@ -211,22 +242,24 @@ export default class Logoing extends Component {
           <LogoedLogoLongForm src={logoedLogo} alt='Logoed Logo' header />
         </Header>
         <VideoWrapper
-          hidden={snapped}
-          onTouchStart={this.handleTouchStart}
-          onTouchMove={this.handleDrag}
-          onTouchEnd={this.handleTouchEnd}>
+          hidden={isImageSet}
+          onTouchStart={this.onTouchStartVideo}
+          onTouchMove={this.onDragVideo}
+          onTouchEnd={this.onTouchEndVideo}>
           <BusinessLogo
             ref={this.logo}
             className='logo'
             src={businesses[this.props.business].logo}
             alt='Businesses logo'
             moving={touched}
+            logoing
+            actionBar={!logoed}
           />
           <Video ref={this.video} autoplay playsInline>
             Video stream not yet available ...
           </Video>
         </VideoWrapper>
-        <Snapshot show={snapped} src={data} alt='camera view plus logo' />
+        <Snapshot show={isImageSet} src={photo} alt='camera view plus logo' />
         <TopActionBar>
           <PossibleShadowBoxWeHaventDecided></PossibleShadowBoxWeHaventDecided>
           {logoed ? (
@@ -243,7 +276,7 @@ export default class Logoing extends Component {
             <InstructionalText>
               Upload a snapshot and tap and drag the logo into place!
             </InstructionalText>
-          ) : snapped ? (
+          ) : isImageSet ? (
             <InstructionalText>
               Tap and drag the logo into place to go to the next step, or retake
               snapshot!
@@ -255,9 +288,9 @@ export default class Logoing extends Component {
           )}
         </TopActionBar>
         <BottomActionBar>
-          <CameraRollButton onClick={() => this.onCameraRoll()} />
-          {snapped ? (
-            <Button secondary onClick={() => this.resetFunctionPlease()}>
+          <CameraRollButton upload={this.onUpload} />
+          {isImageSet ? (
+            <Button secondary onClick={() => this.resetImage()}>
               <ButtonText secondary>Retake</ButtonText>
             </Button>
           ) : ready ? (
@@ -265,7 +298,7 @@ export default class Logoing extends Component {
           ) : (
             <Shutter disabled />
           )}
-          {snapped ? (
+          {isImageSet ? (
             <Button primary onClick={this.handleShare}>
               <ButtonText primary>Ready!</ButtonText>
             </Button>

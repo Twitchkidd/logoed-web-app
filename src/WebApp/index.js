@@ -7,7 +7,11 @@ import Returned from "./screens/Returned";
 export default class WebApp extends Component {
   state = {
     data: null,
-    screen: "Welcome"
+    screen: "Welcome",
+    logo: null,
+    photo: null,
+    top: 0,
+    left: 0
   };
   handleInitiateLogoing = () => {
     this.setState({ screen: "Logoing" });

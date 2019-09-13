@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import { elevation, crayGray } from "../../utilities";
+import { crayGray } from "../../utilities";
 
 export const CardWrapper = styled.div`
   width: 384px;
   height: 384px;
-  background: ${grayGray};
+  background: ${crayGray};
 `;

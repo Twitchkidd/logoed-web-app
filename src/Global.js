@@ -24,6 +24,7 @@ const GlobalStyle = createGlobalStyle`
   .moveable-control-box {
     display: none !important;
   }
+}
 `;
 
 export default GlobalStyle;

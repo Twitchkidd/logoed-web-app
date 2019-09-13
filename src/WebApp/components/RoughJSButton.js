@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { blue, eigengrau, grayGray } from "../../utilities";
+import { blue } from "../../utilities";
 import ReactRough, { Rectangle } from "react-rough";
 
 /*

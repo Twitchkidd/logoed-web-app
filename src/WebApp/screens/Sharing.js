@@ -88,10 +88,9 @@ export default class Sharing extends Component {
             </InstagramTextWrapper>
             <ReactTooltip
               id='tooltip'
-              aria-haspopup='true'
               type='light'
               effect='solid'
-              role='information'
+              role='tooltip'
               description='Caption copied to clipboard'
               data-event='click'>
               <TooltipText light>Caption copied to clipboard!</TooltipText>

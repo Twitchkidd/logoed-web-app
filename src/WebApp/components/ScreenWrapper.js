@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import { lightOrange, darkOrange } from "../../utilities";
 
 export const ScreenWrapper = styled.div`
