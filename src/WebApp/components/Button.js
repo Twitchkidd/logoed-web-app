@@ -1,8 +1,10 @@
+import React, { Component } from "react";
 import styled, { css } from "styled-components";
 import {
   blue,
   eigengrau,
   elevation,
+  crayGray,
   grayGray,
   mostlyWhite
 } from "../../utilities";
@@ -12,7 +14,7 @@ const buttonMcBigHugeMixin = css`
   height: 120px;
 `;
 
-export const Button = styled.button`
+const StyledButton = styled.button`
   width: 80px;
   height: 80px;
   border-radius: 20px;
@@ -25,9 +27,40 @@ export const Button = styled.button`
       : props.secondary
       ? `${blue}`
       : props.disabled
-      ? `${grayGray}`
+      ? `${crayGray}`
       : `${eigengrau}`};
-  background: ${props => (props.primary ? `${blue}` : `${mostlyWhite}`)};
-  border: ${props => (props.secondary ? `2px solid ${blue}` : null)};
+  background: ${props =>
+    props.primary
+      ? `${blue}`
+      : props.pressed
+      ? `${grayGray}`
+      : `${mostlyWhite}`};
+  border: ${props => (props.secondary ? `2px solid ${blue}` : `none`)};
   ${props => (props.buttonMcBigHuge ? buttonMcBigHugeMixin : null)}
 `;
+
+export class Button extends Component {
+  state = {
+    pressed: false
+  };
+  onTouchStartButton = () => {
+    this.setState({
+      pressed: true
+    });
+  };
+  onTouchEndButton = () => {
+    this.setState({
+      pressed: false
+    });
+  };
+  render() {
+    return (
+      <StyledButton
+        {...this.props}
+        onTouchStart={this.onTouchStartButton}
+        onTouchEnd={this.onTouchEndButton}
+        pressed={this.state.pressed}
+      />
+    );
+  }
+}

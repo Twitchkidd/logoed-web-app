@@ -2,7 +2,7 @@ import styled from "styled-components";
 import {
   blue,
   eigengrau,
-  grayGray,
+  crayGray,
   instagram,
   mostlyWhite,
   sans,
@@ -40,7 +40,7 @@ export const InformationalText = styled.p`
 export const ButtonText = styled.span`
   ${sans}
   color: ${props =>
-    props.disabled ? grayGray : props.primary ? mostlyWhite : blue};
+    props.disabled ? crayGray : props.primary ? mostlyWhite : blue};
   font-size: 1.375em;
   font-weight: 600;
   line-height: 1.13636364em;

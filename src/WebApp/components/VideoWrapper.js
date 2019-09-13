@@ -6,4 +6,5 @@ export const VideoWrapper = styled.div`
   height: 100vw;
   overflow: hidden;
   display: ${props => (props.hidden ? "none" : "block")};
+  border: 1px dotted yellow;
 `;
