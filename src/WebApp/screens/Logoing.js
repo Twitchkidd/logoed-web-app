@@ -299,30 +299,21 @@ export default class Logoing extends Component {
         )}
         <TopActionBar>
           {logoed ? null : <ShadowLogo ref={this.shadowLogo} />}
-          {logoed ? (
-            noCameraPermission ? (
-              <InstructionalText actionBar>
-                Ready! Adjust logo, upload new snapshot, or go to the next step!
-              </InstructionalText>
-            ) : (
-              <InstructionalText actionBar>
-                Ready! Adjust logo, retake snapshot, or go to the next step!
-              </InstructionalText>
-            )
-          ) : noCameraPermission ? (
-            <InstructionalText actionBar>
-              Upload a snapshot and tap and drag the logo into place!
-            </InstructionalText>
-          ) : snapped || uploaded ? (
-            <InstructionalText actionBar>
-              Tap and drag the logo into place to go to the next step, or retake
-              snapshot!
-            </InstructionalText>
-          ) : (
-            <InstructionalText actionBar>
-              Take a snapshot and tap and drag the logo into place!
-            </InstructionalText>
-          )}
+          <InstructionalText actionBar>
+            {logoed && noCameraPermission && uploaded
+              ? "Ready! Adjust logo, upload new snapshot, or go to the next step!"
+              : logoed && noCameraPermission
+              ? "Upload a snapshot and adjust logo to go to the next step!"
+              : logoed && (snapped || uploaded)
+              ? "Ready! Adjust logo or go to the next step!"
+              : logoed
+              ? "Take or upload snapshot and adjust logo to go to the next step!"
+              : snapped || uploaded
+              ? "Tap and drag logo into place to go to the next step!"
+              : noCameraPermission
+              ? "Upload a snapshot and tap and drag logo into place to go to the next step!"
+              : "Take or upload snapshot and tap and drag logo into place to go to the next step!"}
+          </InstructionalText>
         </TopActionBar>
         <BottomActionBar>
           <CameraRollButton upload={this.onUpload} />

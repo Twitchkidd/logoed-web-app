@@ -1,7 +1,14 @@
+import React, { Component } from "react";
 import styled from "styled-components";
 
-export const BottomActionBar = styled.div`
-  height: 100px;
+// ! padding-left the difference between the right button and the left
+
+const BottomActionBarBlock = styled.div`
+  display: block;
+  height: calc(74vh - 100vw - 72px);
+`;
+
+const BottomActionBarFlex = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -9,4 +16,12 @@ export const BottomActionBar = styled.div`
   margin-left: 22px;
 `;
 
-// ! padding-left the difference between the right button and the left
+export class BottomActionBar extends Component {
+  render() {
+    return (
+      <BottomActionBarBlock>
+        <BottomActionBarFlex>{this.props.children}</BottomActionBarFlex>
+      </BottomActionBarBlock>
+    );
+  }
+}

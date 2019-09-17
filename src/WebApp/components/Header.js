@@ -4,7 +4,7 @@ import { lightOrange } from "../../utilities";
 
 const HeaderBlock = styled.div`
   display: block;
-  height: 8vh;
+  height: 7vh;
   width: 100%
   background-color: ${lightOrange};
 `;
