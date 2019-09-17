@@ -12,4 +12,5 @@ export const ScreenWrapper = styled.div`
   background-image: ${props =>
     props.gradient ? `linear-gradient(${lightOrange}, ${darkOrange})` : null};
   background-color: #fbfafa;
+  position: relative;
 `;

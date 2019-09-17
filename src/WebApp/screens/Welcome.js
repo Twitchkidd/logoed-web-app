@@ -7,7 +7,6 @@ import {
   ButtonText,
   InformationalText,
   LogoedLogoLongForm,
-  PresentationalText,
   ToSBar,
   ToSLink
 } from "../components";
@@ -35,13 +34,17 @@ const businesses = {
     handle: "@fakemafia"
   }
 };
-
+//marginLeft: "15vw", marginRight: "15vw"
 export default class Welcome extends Component {
   render() {
     const { business, initiateLogoing } = this.props;
     return (
       <ScreenWrapper gradient>
-        <LogoedLogoLongForm src={logoedLogo} alt='Logoed Logo' />
+        <LogoedLogoLongForm
+          src={logoedLogo}
+          alt='Logoed Logo'
+          style={{ marginTop: "1em" }}
+        />
         <BiggerPresentationalText light>
           In partnership with:
         </BiggerPresentationalText>
@@ -49,21 +52,18 @@ export default class Welcome extends Component {
           src={businesses[business].logo}
           alt={`${business} logo`}
         />
-        <PresentationalText light>
-          {businesses[business].name}
-        </PresentationalText>
-        <InformationalText
-          light
-          style={{ marginLeft: "15vw", marginRight: "15vw" }}>
+        <InformationalText light style={{ margin: "1em 15vw" }}>
           Snap a photo for your Instragram and put the{" "}
-          {businesses[business].name} logo with on it to enter to win a $50 gift
+          {businesses[business].name} logo on it to enter to win a $50 gift
           card!
         </InformationalText>
         <Button primary buttonMcBigHuge onClick={() => initiateLogoing()}>
           <ButtonText primary>Got it!</ButtonText>
         </Button>
-        <ToSBar>
-          <ToSLink>Terms of Service</ToSLink>
+        <ToSBar style={{ margin: "1em 0" }}>
+          <u>
+            <ToSLink>Terms of Service</ToSLink>
+          </u>
         </ToSBar>
       </ScreenWrapper>
     );

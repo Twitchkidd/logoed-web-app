@@ -2,9 +2,10 @@ import styled from "styled-components";
 
 export const VideoWrapper = styled.div`
   position: relative;
-  width: 100%;
-  height: 100vw;
-  overflow: hidden;
+  height: 414px;
   display: ${props => (props.hidden ? "none" : "block")};
-  border: 1px dotted yellow;
+  z-index: 5;
+  overflow: hidden;
+  width: 100%;
 `;
+// height: 100vw;

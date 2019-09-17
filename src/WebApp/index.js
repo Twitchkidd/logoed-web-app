@@ -6,12 +6,12 @@ import Returned from "./screens/Returned";
 
 export default class WebApp extends Component {
   state = {
-    data: null,
     screen: "Welcome",
     logo: null,
-    photo: null,
     top: 0,
-    left: 0
+    left: 0,
+    snapshot: null,
+    logoedSnapshot: null
   };
   handleInitiateLogoing = () => {
     this.setState({ screen: "Logoing" });
@@ -20,8 +20,12 @@ export default class WebApp extends Component {
     this.setState({ screen: "No Permissions" });
   };
   handleInitiateSharing = data => {
+    const { top, left, snapshot, logoedSnapshot } = data;
     this.setState({
-      data,
+      top,
+      left,
+      snapshot,
+      logoedSnapshot,
       screen: "Sharing"
     });
   };

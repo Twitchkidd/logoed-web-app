@@ -6,8 +6,8 @@ import { eigengrau } from "../../utilities";
 
 const CameraRollLabel = styled.label`
   display: inline-block;
-  width: 56px;
-  height: 56px;
+  width: 42px;
+  height: 42px;
   background: ${eigengrau};
 `;
 

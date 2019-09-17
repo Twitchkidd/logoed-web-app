@@ -10,13 +10,13 @@ import {
 } from "../../utilities";
 
 const buttonMcBigHugeMixin = css`
-  width: 334px;
-  height: 120px;
+  width: 80vw;
+  height: 96px;
 `;
 
 const StyledButton = styled.button`
-  width: 80px;
-  height: 80px;
+  width: 64px;
+  height: 64px;
   border-radius: 20px;
   display: inline-block;
   text-align: center;

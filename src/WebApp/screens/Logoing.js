@@ -9,11 +9,12 @@ import {
   Header,
   InstructionalText,
   LogoedLogoLongForm,
-  PossibleShadowBoxWeHaventDecided,
   ScreenWrapper,
   ShadowCanvas,
+  ShadowLogo,
   Shutter,
   Snapshot,
+  SnapshotWrapper,
   TopActionBar,
   Video,
   VideoWrapper
@@ -47,46 +48,71 @@ const businesses = {
 export default class Logoing extends Component {
   constructor(props) {
     super(props);
+    this.logo = createRef();
+    this.shadowLogo = createRef();
     this.video = createRef();
     this.canvas = createRef();
-    this.logo = createRef();
   }
   state = {
-    data: null,
     back: false,
     noCameraPermission: false,
-    ready: false,
-    playing: false,
-    snapped: false,
-    logoed: false,
-    uploaded: false,
-    photo: null,
-    height: 0,
-    top: 0,
-    left: 0,
-    os: null,
     stream: null,
-    isImageSet: false
+    logoed: false,
+    top: null,
+    left: null,
+    dragging: false,
+    shutterPressed: false,
+    snapshot: null,
+    logoedSnapshot: null,
+    snapped: false,
+    uploaded: false,
+    ready: false
   };
   componentDidMount() {
-    if (this.props.data) {
+    console.log(window.innerHeight);
+    if (this.props.logoedSnapshot) {
       this.setState({
         data: this.props.data,
         back: true
       });
     } else {
       this.startCamera();
+      this.setLogoInitialPosition();
     }
   }
-  startCamera = () => {
-    let os;
-    if (navigator.vendor === "Apple Computer, Inc.") {
-      os = "ios";
-    } else if (navigator.vendor === "Google Inc.") {
-      os = "android";
-    } else {
-      console.log("uh-oh");
+  setLogoInitialPosition = () => {
+    // ! Are we coming from a returned state or not?
+    // * If back, top and left equal to the incoming top and left,
+    // * otherwise, top and left equal to things dependent on first render.
+    if (this.state.back) {
+      console.log("wopp!");
     }
+    let rect = this.shadowLogo.current.getBoundingClientRect();
+    this.setState(
+      {
+        top: Math.round(rect.top),
+        left: Math.round(rect.left)
+      },
+      () => {
+        this.logo.current.style.top = `${this.state.top}px`;
+        this.logo.current.style.left = `${this.state.left}px`;
+      }
+    );
+  };
+  toLogoedOrNotToLogoed = () => {
+    const { left, right } = this.props;
+    const width = window.innerWidth;
+    this.setState(
+      {
+        dragging: false,
+        logoed: true
+      },
+      () => {
+        console.log("hey");
+      }
+    );
+  };
+  startCamera = () => {
     navigator.mediaDevices
       .getUserMedia({
         video: {
@@ -100,12 +126,22 @@ export default class Logoing extends Component {
       .then(stream => {
         this.video.current.srcObject = stream;
         this.video.current.play();
-        this.setState({ ready: true, playing: true, os, stream });
+        this.setState({ isVideoPlaying: true, stream });
       })
       .catch(err => {
         console.log(err);
         this.setState({ noCameraPermission: true });
       });
+  };
+  shutterPress = () => {
+    this.setState({
+      shutterPressed: true
+    });
+  };
+  shutterUnpress = () => {
+    this.setState({
+      shutterPressed: false
+    });
   };
   snapPhoto = () => {
     const { left, top } = this.state;
@@ -124,16 +160,20 @@ export default class Logoing extends Component {
       width,
       width
     );
+    let snapshot = this.canvas.current.toDataURL("image/png");
+    this.setState({
+      snapshot
+    });
     context.drawImage(this.logo.current, left, top, width * 0.31, width * 0.31);
-    let photo = this.canvas.current.toDataURL("image/png");
-    this.setImage(photo, "snapped");
+    let logoedSnapshot = this.canvas.current.toDataURL("image/png");
+    this.setImage(logoedSnapshot, "snapped");
   };
   onUpload = e => {
-    const { photo } = this.state;
+    const { snapshot } = this.state;
     let setImage = this.setImage;
     let file = e.target.files[0];
     if (file) {
-      if (photo) {
+      if (snapshot) {
         let isReplacePhotoConfirmed = window.confirm("Replace photo?");
         if (!isReplacePhotoConfirmed) {
           return;
@@ -149,76 +189,65 @@ export default class Logoing extends Component {
   setImage = (img, source) => {
     const { stream } = this.state;
     if (source === "uploaded") {
-      this.setState({
-        uploaded: true,
-        snapped: false,
-        photo: img,
-        isImageSet: true
-      });
-      stream.getVideoTracks()[0].stop();
+      this.setState(
+        {
+          uploaded: true,
+          snapped: false,
+          snapshot: img
+        },
+        () => {
+          console.log("trigger logo the snapshot here");
+        }
+      );
+      if (stream) {
+        stream.getVideoTracks()[0].stop();
+      }
     } else if (source === "snapped") {
-      this.setState({
-        uploaded: false,
-        snapped: true,
-        photo: img,
-        isImageSet: true
-      });
-      stream.getVideoTracks()[0].stop();
+      this.setState(
+        {
+          uploaded: false,
+          snapped: true,
+          snapshot: img
+        },
+        () => {
+          console.log("trigger logo the snapshot here");
+        }
+      );
+      if (stream) {
+        stream.getVideoTracks()[0].stop();
+      }
     } else {
       console.log("setImage called without proper source");
     }
   };
   resetImage = () => {
-    const { stream } = this.state;
     this.setState({
-      isImageSet: false,
-      photo: null
+      snapped: false,
+      uploaded: false,
+      snapshot: null
     });
     this.startCamera();
   };
-  onTouchStart = e => {
-    e.preventDefault();
-    this.setState({
-      touched: true
-    });
-    if (this.state.playing === false) {
-      this.video.current.play();
-      this.setState({
-        playing: true
-      });
-    }
-  };
-  onDrag = () => {
-    // e.preventDefault(); ?
-    console.log("handle drag!");
-  };
-  onTouchEnd = e => {
-    // TODO Please write here whether the end state is within bounds, or however we do that check, and set this.state.logoed
-    e.preventDefault();
-    console.log(e);
-    this.setState({
-      touched: false
-    });
-  };
   handleShare = () => {
-    const { initiateSharing } = this.props;
-    const { data } = this.state;
+    const { initiateSharing, top, left, snapshot, logoedSnapshot } = this.props;
+    const data = {
+      top,
+      left,
+      snapshot,
+      logoedSnapshot
+    };
     initiateSharing(data);
   };
   render() {
     const {
-      data,
-      ready,
-      touched,
-      snapped,
-      playing,
-      logoed,
-      uploaded,
       noCameraPermission,
-      photo,
-      isImageSet
+      logoed,
+      dragging,
+      shutterPressed,
+      snapped,
+      uploaded,
+      snapshot
     } = this.state;
-    const width = window.innerWidth;
     return (
       <ScreenWrapper>
         <Helmet>
@@ -231,74 +260,87 @@ export default class Logoing extends Component {
         <Moveable
           target={document.querySelector(".logo")}
           draggable={true}
+          onDragStart={() => {
+            this.setState({
+              dragging: true
+            });
+          }}
           onDrag={({ target, left, top }) => {
-            console.log(target);
             target.style.left = `${left}px`;
             target.style.top = `${top}px`;
             this.setState({ left, top });
           }}
+          onDragEnd={() => {
+            this.toLogoedOrNotToLogoed();
+          }}
+        />
+        <BusinessLogo
+          ref={this.logo}
+          className='logo'
+          src={businesses[this.props.business].logo}
+          alt='Businesses logo'
+          logoing
+          moving={dragging}
+          actionBar={logoed ? false : true}
         />
         <Header>
           <LogoedLogoLongForm src={logoedLogo} alt='Logoed Logo' header />
         </Header>
-        <VideoWrapper
-          hidden={isImageSet}
-          onTouchStart={this.onTouchStartVideo}
-          onTouchMove={this.onDragVideo}
-          onTouchEnd={this.onTouchEndVideo}>
-          <BusinessLogo
-            ref={this.logo}
-            className='logo'
-            src={businesses[this.props.business].logo}
-            alt='Businesses logo'
-            moving={touched}
-            logoing
-            actionBar={!logoed}
-          />
-          <Video ref={this.video} autoplay playsInline>
-            Video stream not yet available ...
-          </Video>
-        </VideoWrapper>
-        <Snapshot show={isImageSet} src={photo} alt='camera view plus logo' />
+        {snapped || uploaded ? (
+          <SnapshotWrapper>
+            <Snapshot src={snapshot} alt='camera view plus logo' />
+          </SnapshotWrapper>
+        ) : (
+          <VideoWrapper>
+            <Video ref={this.video} autoplay playsInline>
+              Video stream not yet available ...
+            </Video>
+          </VideoWrapper>
+        )}
         <TopActionBar>
-          <PossibleShadowBoxWeHaventDecided></PossibleShadowBoxWeHaventDecided>
+          {logoed ? null : <ShadowLogo ref={this.shadowLogo} />}
           {logoed ? (
             noCameraPermission ? (
-              <InstructionalText>
+              <InstructionalText actionBar>
                 Ready! Adjust logo, upload new snapshot, or go to the next step!
               </InstructionalText>
             ) : (
-              <InstructionalText>
+              <InstructionalText actionBar>
                 Ready! Adjust logo, retake snapshot, or go to the next step!
               </InstructionalText>
             )
           ) : noCameraPermission ? (
-            <InstructionalText>
+            <InstructionalText actionBar>
               Upload a snapshot and tap and drag the logo into place!
             </InstructionalText>
-          ) : isImageSet ? (
-            <InstructionalText>
+          ) : snapped || uploaded ? (
+            <InstructionalText actionBar>
               Tap and drag the logo into place to go to the next step, or retake
               snapshot!
             </InstructionalText>
           ) : (
-            <InstructionalText>
+            <InstructionalText actionBar>
               Take a snapshot and tap and drag the logo into place!
             </InstructionalText>
           )}
         </TopActionBar>
         <BottomActionBar>
           <CameraRollButton upload={this.onUpload} />
-          {isImageSet ? (
+          {snapped || uploaded ? (
             <Button secondary onClick={() => this.resetImage()}>
               <ButtonText secondary>Retake</ButtonText>
             </Button>
-          ) : ready ? (
-            <Shutter onClick={() => this.snapPhoto()} />
-          ) : (
+          ) : noCameraPermission ? (
             <Shutter disabled />
+          ) : (
+            <Shutter
+              pressed={shutterPressed}
+              onClick={() => this.snapPhoto()}
+              onTouchStart={() => this.shutterPress()}
+              onTouchEnd={() => this.shutterUnpress()}
+            />
           )}
-          {isImageSet ? (
+          {(snapped || uploaded) && logoed ? (
             <Button primary onClick={this.handleShare}>
               <ButtonText primary>Ready!</ButtonText>
             </Button>
@@ -313,23 +355,6 @@ export default class Logoing extends Component {
     );
   }
 }
-
-/*
-Okay maybe instead of a shadow element, handle it with the wrapper element. Still undecided.
-*******************************************
-I need a shadow element here, since the Logo is being placed
-absolutely, I need the // text to react as if the Logo was next to it
-though, and then we handle the user not // getting the logo to the
-video element by everything bouncing back into place. // This is going
-to be delightful.
-{playing ? (
-  <CameraButton onClick={() => this.snapPhoto()} />
-) : (
-  <InstructionalText style={{ marginTop: "calc(10vw + 8px)" }}>
-    Tap and drag to place logo!
-  </InstructionalText>
-)}
-*/
 
 /*
 } else {
@@ -415,3 +440,34 @@ to be delightful.
       });
   };
   */
+/*
+startCamera = () => {
+    let os;
+    if (navigator.vendor === "Apple Computer, Inc.") {
+      os = "ios";
+    } else if (navigator.vendor === "Google Inc.") {
+      os = "android";
+    } else {
+      console.log("uh-oh");
+    }
+    navigator.mediaDevices
+      .getUserMedia({
+        video: {
+          width: {
+            min: 1080, // This is not the way.
+            ideal: 1280
+          },
+          facingMode: "environment"
+        }
+      })
+      .then(stream => {
+        this.video.current.srcObject = stream;
+        this.video.current.play();
+        this.setState({ isVideoPlaying: true, os, stream });
+      })
+      .catch(err => {
+        console.log(err);
+        this.setState({ noCameraPermission: true });
+      });
+  };
+*/

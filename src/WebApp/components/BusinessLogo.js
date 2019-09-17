@@ -7,18 +7,18 @@ const logoingMixin = css`
   position: absolute;
   transition: opacity 1.8s;
   opacity: ${props => (props.moving ? 0.6 : 1.0)};
-  z-index: 8000;
 `;
 
 const actionBarMixin = css`
-  width: 23vw;
-  height: 23vw;
+  width: 18vw;
+  height: 18vw;
   ${elevation[1]};
 `;
 
 export const BusinessLogo = styled.img`
   width: 65vw;
   height: 65vw;
+  z-index: 9001;
   ${props => (props.logoing ? logoingMixin : null)}
-  ${props => (props.actionBar ? actionBarMixin : null)}
+  ${props => (props.actionBar && !props.moving ? actionBarMixin : null)}
 `;

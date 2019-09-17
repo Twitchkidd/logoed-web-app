@@ -12,22 +12,24 @@ import {
 export const BiggerPresentationalText = styled.p`
   ${serif}
   color: ${props => (props.light ? mostlyWhite : eigengrau)};
-  font-size: 2em;
+  font-size: 1.675em;
   line-height: 1.25em;
 `;
 
 export const PresentationalText = styled.p`
   ${serif}
   color: ${props => (props.light ? mostlyWhite : eigengrau)};
-  font-size: 1.625em;
+  font-size: 1.375em;
   line-height: 1.15384615em;
 `;
 
 export const InstructionalText = styled.p`
   ${sans}
   color: ${props => (props.light ? mostlyWhite : eigengrau)};
-  font-size: 1.375em;
+  font-size: 1.125em;
   line-height: 1.13636364em;
+  ${props => (props.actionBar ? "max-width: 60vw;" : null)}
+  text-align: center;
 `;
 
 export const InformationalText = styled.p`
@@ -35,13 +37,14 @@ export const InformationalText = styled.p`
   color: ${props => (props.light ? mostlyWhite : eigengrau)};
   font-size: 1.125em;
   line-height: 1.11111111em;
+  text-align: center;
 `;
 
 export const ButtonText = styled.span`
   ${sans}
   color: ${props =>
     props.disabled ? crayGray : props.primary ? mostlyWhite : blue};
-  font-size: 1.375em;
+  font-size: 1.125em;
   font-weight: 600;
   line-height: 1.13636364em;
 `;
