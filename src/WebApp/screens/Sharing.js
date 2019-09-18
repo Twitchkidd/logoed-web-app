@@ -63,8 +63,8 @@ export default class Sharing extends Component {
     ready: "WTF IS THIS"
   };
   componentDidMount() {
-    this.toolTipFunctionPlease();
-    this.modalOpenFunctionPlease();
+    // this.toolTipFunctionPlease();
+    // this.modalOpenFunctionPlease();
   }
   render() {
     const { data, business } = this.props;

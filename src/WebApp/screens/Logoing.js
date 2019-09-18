@@ -70,6 +70,7 @@ export default class Logoing extends Component {
   };
   componentDidMount() {
     console.log(window.innerHeight);
+    console.log(window.innerWidth);
     if (this.props.logoedSnapshot) {
       this.setState({
         data: this.props.data,
@@ -102,15 +103,7 @@ export default class Logoing extends Component {
   toLogoedOrNotToLogoed = () => {
     const { left, right } = this.props;
     const width = window.innerWidth;
-    this.setState(
-      {
-        dragging: false,
-        logoed: true
-      },
-      () => {
-        console.log("hey");
-      }
-    );
+    const headerHeight = this.setState({ dragging: false, logoed: true });
   };
   startCamera = () => {
     navigator.mediaDevices
@@ -118,7 +111,7 @@ export default class Logoing extends Component {
         video: {
           width: {
             min: 1080, // This is not the way.
-            ideal: 1280
+            ideal: 1280 // It was 1080 - 1280 before
           },
           facingMode: "environment"
         }
@@ -221,6 +214,11 @@ export default class Logoing extends Component {
     }
   };
   resetImage = () => {
+    const { snapshot } = this.state;
+    let isReplacePhotoConfirmed = window.confirm("Replace photo?");
+    if (!isReplacePhotoConfirmed) {
+      return;
+    }
     this.setState({
       snapped: false,
       uploaded: false,

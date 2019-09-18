@@ -34,7 +34,7 @@ const businesses = {
     handle: "@fakemafia"
   }
 };
-//marginLeft: "15vw", marginRight: "15vw"
+
 export default class Welcome extends Component {
   render() {
     const { business, initiateLogoing } = this.props;
@@ -61,9 +61,9 @@ export default class Welcome extends Component {
           <ButtonText primary>Got it!</ButtonText>
         </Button>
         <ToSBar style={{ margin: "1em 0" }}>
-          <u>
-            <ToSLink>Terms of Service</ToSLink>
-          </u>
+          <ToSLink>
+            <u>Terms of Service</u>
+          </ToSLink>
         </ToSBar>
       </ScreenWrapper>
     );

@@ -7,11 +7,11 @@ import Returned from "./screens/Returned";
 export default class WebApp extends Component {
   state = {
     screen: "Welcome",
+    logoedSnapshot: null,
+    snapshot: null,
     logo: null,
     top: 0,
-    left: 0,
-    snapshot: null,
-    logoedSnapshot: null
+    left: 0
   };
   handleInitiateLogoing = () => {
     this.setState({ screen: "Logoing" });
