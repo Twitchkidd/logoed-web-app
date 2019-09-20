@@ -60,15 +60,37 @@ Modal.setAppElement("#root");
 export default class Sharing extends Component {
   state = {
     isModalOpen: false,
-    ready: "WTF IS THIS"
+    ready: true,
+    top: null,
+    left: null,
+    snapshot: null,
+    logoedSnapshot: null
   };
+  componentWillMount() {
+    const { top, left, snapshot, logoedSnapshot } = this.props;
+    this.setState({ top, left, snapshot, logoedSnapshot });
+  }
   componentDidMount() {
     // this.toolTipFunctionPlease();
+    // this.copyTextFunctionPlease();
     // this.modalOpenFunctionPlease();
+    // this.listenForLongPressPlease();
   }
+  handleBack = () => {
+    const { initiateBack } = this.props;
+    initiateBack();
+  };
   render() {
-    const { data, business } = this.props;
-    const { isModalOpen, ready } = this.state;
+    console.log(this.state);
+    const { business } = this.props;
+    const {
+      isModalOpen,
+      ready,
+      top,
+      left,
+      snapshot,
+      logoedSnapshot
+    } = this.state;
     return (
       <ScreenWrapper>
         <Header>
@@ -76,12 +98,12 @@ export default class Sharing extends Component {
         </Header>
         <CardWrapper>
           <Card>
-            <Image src={data} />
+            <Image src={logoedSnapshot} alt='logoed snapshot' />
             <InstagramTextWrapper data-tip data-for='tooltip'>
-              <InstagramText handle>InstaYou</InstagramText>
-              <InstagramText>Yum! Snapped a photo with</InstagramText>
-              <InstagramText atMention>@logoedapp</InstagramText>
-              <InstagramText>at</InstagramText>
+              <InstagramText handle>InstaYou</InstagramText>&nbsp;
+              <InstagramText>Yum! Snapped a photo with</InstagramText>&nbsp;
+              <InstagramText atMention>@logoedapp</InstagramText>&nbsp;
+              <InstagramText>at</InstagramText>&nbsp;
               <InstagramText atMention>
                 {businesses[business].handle}
               </InstagramText>
@@ -98,7 +120,7 @@ export default class Sharing extends Component {
           </Card>
         </CardWrapper>
         <SharingActionBar>
-          <Button secondary onClick={() => this.handleBack}>
+          <Button secondary onClick={this.handleBack}>
             <ButtonText secondary>Back</ButtonText>
           </Button>
           <InformationalText>
@@ -106,8 +128,8 @@ export default class Sharing extends Component {
             your entry counts!
           </InformationalText>
           {ready ? (
-            <Button enabled onClick={() => this.handleShare}>
-              <ButtonText enabled>Share!</ButtonText>
+            <Button primary onClick={() => this.handleShare}>
+              <ButtonText primary>Share!</ButtonText>
             </Button>
           ) : (
             <Button disabled>

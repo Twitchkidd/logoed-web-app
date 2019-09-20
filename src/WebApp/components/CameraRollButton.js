@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import { eigengrau } from "../../utilities";
 
-// TODO pass in the onchange function!
-
 const CameraRollLabel = styled.label`
   display: inline-block;
   width: 42px;

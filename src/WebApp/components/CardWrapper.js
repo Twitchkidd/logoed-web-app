@@ -1,8 +1,11 @@
 import styled from "styled-components";
-import { crayGray } from "../../utilities";
+import { grayGray } from "../../utilities";
 
 export const CardWrapper = styled.div`
-  width: 384px;
-  height: 384px;
-  background: ${crayGray};
+  width: 100vw;
+  height: 100vw;
+  background: ${grayGray};
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;

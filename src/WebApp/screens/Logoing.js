@@ -1,4 +1,5 @@
 import React, { Component, createRef } from "react";
+import imageCompression from "browser-image-compression";
 import { Helmet } from "react-helmet";
 import {
   BottomActionBar,
@@ -51,6 +52,7 @@ export default class Logoing extends Component {
     this.logo = createRef();
     this.shadowLogo = createRef();
     this.video = createRef();
+    this.image = createRef();
     this.canvas = createRef();
   }
   state = {
@@ -65,15 +67,25 @@ export default class Logoing extends Component {
     snapshot: null,
     logoedSnapshot: null,
     snapped: false,
-    uploaded: false,
-    ready: false
+    uploaded: false
   };
   componentDidMount() {
-    console.log(window.innerHeight);
-    console.log(window.innerWidth);
     if (this.props.logoedSnapshot) {
+      const {
+        top,
+        left,
+        snapshot,
+        logoedSnapshot,
+        snapped,
+        uploaded
+      } = this.props;
       this.setState({
-        data: this.props.data,
+        top,
+        left,
+        snapshot,
+        logoedSnapshot,
+        snapped,
+        uploaded,
         back: true
       });
     } else {
@@ -81,6 +93,7 @@ export default class Logoing extends Component {
       this.setLogoInitialPosition();
     }
   }
+  // >> LOGO POSITIONING
   setLogoInitialPosition = () => {
     // ! Are we coming from a returned state or not?
     // * If back, top and left equal to the incoming top and left,
@@ -105,6 +118,7 @@ export default class Logoing extends Component {
     const width = window.innerWidth;
     const headerHeight = this.setState({ dragging: false, logoed: true });
   };
+  // >> CAMERA USAGE
   startCamera = () => {
     navigator.mediaDevices
       .getUserMedia({
@@ -136,82 +150,127 @@ export default class Logoing extends Component {
       shutterPressed: false
     });
   };
-  snapPhoto = () => {
-    const { left, top } = this.state;
+  //  context.drawImage(img,sx,sy,swidth,sheight,x,y,width,height);
+  /*
+    img	Specifies the image, canvas, or video element to use	 
+    sx	Optional. The x coordinate where to start clipping	
+    sy	Optional. The y coordinate where to start clipping	
+    swidth	Optional. The width of the clipped image	
+    sheight	Optional. The height of the clipped image	
+    x	The x coordinate where to place the image on the canvas	
+    y	The y coordinate where to place the image on the canvas	
+    width	Optional. The width of the image to use (stretch or reduce the image)	
+    height	Optional. The height of the image to use (stretch or reduce the image)
+  */
+  paintCanvasStill = source => {
     const width = window.innerWidth;
     let context = this.canvas.current.getContext("2d");
     context.canvas.width = width;
     context.canvas.height = width;
-    context.drawImage(
-      this.video.current,
-      0,
-      0,
-      Math.round(width * 1.70048309),
-      Math.round(width * 1.70048309),
-      0,
-      0,
-      width,
-      width
-    );
-    let snapshot = this.canvas.current.toDataURL("image/png");
-    this.setState({
-      snapshot
-    });
-    context.drawImage(this.logo.current, left, top, width * 0.31, width * 0.31);
-    let logoedSnapshot = this.canvas.current.toDataURL("image/png");
-    this.setImage(logoedSnapshot, "snapped");
-  };
-  onUpload = e => {
-    const { snapshot } = this.state;
-    let setImage = this.setImage;
-    let file = e.target.files[0];
-    if (file) {
-      if (snapshot) {
-        let isReplacePhotoConfirmed = window.confirm("Replace photo?");
-        if (!isReplacePhotoConfirmed) {
-          return;
-        }
-      }
-      let reader = new FileReader();
-      reader.onloadend = function(e) {
-        setImage(e.target.result, "uploaded");
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-  setImage = (img, source) => {
-    const { stream } = this.state;
-    if (source === "uploaded") {
-      this.setState(
-        {
-          uploaded: true,
-          snapped: false,
-          snapshot: img
-        },
-        () => {
-          console.log("trigger logo the snapshot here");
-        }
+    if (source === "snapped") {
+      context.clearRect(0, 0, width, width);
+      context.drawImage(
+        this.video.current,
+        0,
+        0,
+        Math.round(width * 1.70048309), // ! Clearly this part is fucked up
+        Math.round(width * 1.70048309),
+        0,
+        0,
+        width,
+        width
       );
-      if (stream) {
-        stream.getVideoTracks()[0].stop();
-      }
-    } else if (source === "snapped") {
-      this.setState(
-        {
-          uploaded: false,
-          snapped: true,
-          snapshot: img
-        },
-        () => {
-          console.log("trigger logo the snapshot here");
-        }
+    } else if (source === "uploaded") {
+      console.log(context);
+      console.log("context");
+      console.log(width);
+      console.log("width");
+      console.log(this.image.current);
+      console.log("this.image.current");
+      context.clearRect(0, 0, width, width);
+      context.drawImage(
+        this.image.current,
+        0,
+        0,
+        Math.round(width * 1.70048309), // ! Clearly this part is fucked up
+        Math.round(width * 1.70048309),
+        0,
+        0,
+        width,
+        width
       );
-      if (stream) {
-        stream.getVideoTracks()[0].stop();
-      }
     } else {
-      console.log("setImage called without proper source");
+      console.log("paintCanvasStill() called improperly!");
     }
+  };
+  logoCanvas = () => {
+    const { left, top } = this.state;
+    const width = window.innerWidth;
+    let context = this.canvas.current.getContext("2d");
+    context.drawImage(this.logo.current, left, top, width * 0.31, width * 0.31);
+  };
+  createPNG = () => {
+    return this.canvas.current.toDataURL("image/png");
+  };
+  snapPhoto = () => {
+    const { stream } = this.state;
+    this.paintCanvasStill("snapped");
+    let snapshot = this.createPNG();
+    this.setState({
+      snapshot,
+      snapped: true,
+      uploaded: false
+    });
+    stream.getVideoTracks()[0].stop();
+  };
+  onUpload = async e => {
+    const { snapshot, stream } = this.state;
+    let file = e.target.files[0];
+    console.log("originalFile instanceof Blob", file instanceof Blob); // true
+    console.log(`originalFile size ${file.size / 1024 / 1024} MB`);
+    if (snapshot) {
+      let isReplacePhotoConfirmed = window.confirm("Replace photo?");
+      if (!isReplacePhotoConfirmed) {
+        return;
+      }
+    }
+    let options = {
+      maxSizeMB: 1,
+      maxWidthOrHeight: 720,
+      useWebWorker: false
+    };
+    try {
+      const compressedFile = await imageCompression(file, options);
+      console.log(
+        "compressedFile instanceof Blob",
+        compressedFile instanceof Blob
+      ); // true
+      console.log(
+        `compressedFile size ${compressedFile.size / 1024 / 1024} MB`
+      ); // smaller than maxSizeMB
+      this.handleCompressedFileFromUpload(compressedFile);
+    } catch (err) {
+      console.log(err);
+    }
+    if (stream) {
+      stream.getVideoTracks()[0].stop();
+    }
+  };
+  handleCompressedFileFromUpload = compressedFile => {
+    console.log("handleCompressedFileFromUpload");
+    let reader = new FileReader();
+    reader.onloadend = e => {
+      let compressedSnapshot = e.target.result;
+      this.setState({
+        snapshot: compressedSnapshot,
+        snapped: false,
+        uploaded: true
+      });
+    };
+    reader.readAsDataURL(compressedFile);
+  };
+  uploadLoads = () => {
+    this.paintCanvasStill("uploaded");
   };
   resetImage = () => {
     const { snapshot } = this.state;
@@ -227,14 +286,28 @@ export default class Logoing extends Component {
     this.startCamera();
   };
   handleShare = () => {
-    const { initiateSharing, top, left, snapshot, logoedSnapshot } = this.props;
-    const data = {
-      top,
-      left,
-      snapshot,
-      logoedSnapshot
-    };
-    initiateSharing(data);
+    const { initiateSharing } = this.props;
+    this.logoCanvas();
+    let logoedSnapshot = this.createPNG();
+    this.setState({ logoedSnapshot }, () => {
+      const {
+        top,
+        left,
+        snapshot,
+        logoedSnapshot,
+        snapped,
+        uploaded
+      } = this.state;
+      const data = {
+        top,
+        left,
+        snapshot,
+        logoedSnapshot,
+        snapped,
+        uploaded
+      };
+      initiateSharing(data);
+    });
   };
   render() {
     const {
@@ -284,9 +357,22 @@ export default class Logoing extends Component {
         <Header>
           <LogoedLogoLongForm src={logoedLogo} alt='Logoed Logo' header />
         </Header>
-        {snapped || uploaded ? (
+        {snapped ? (
           <SnapshotWrapper>
-            <Snapshot src={snapshot} alt='camera view plus logo' />
+            <Snapshot
+              ref={this.image}
+              src={snapshot}
+              alt='snapshot hopefully of food, hopefully with a logo on it'
+            />
+          </SnapshotWrapper>
+        ) : uploaded ? (
+          <SnapshotWrapper>
+            <Snapshot
+              ref={this.image}
+              src={snapshot}
+              alt='snapshot hopefully of food, hopefully with a logo on it'
+              onLoad={this.uploadLoads}
+            />
           </SnapshotWrapper>
         ) : (
           <VideoWrapper>

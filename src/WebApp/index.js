@@ -20,39 +20,73 @@ export default class WebApp extends Component {
     this.setState({ screen: "No Permissions" });
   };
   handleInitiateSharing = data => {
-    const { top, left, snapshot, logoedSnapshot } = data;
+    const { top, left, snapshot, logoedSnapshot, snapped, uploaded } = data;
     this.setState({
       top,
       left,
       snapshot,
       logoedSnapshot,
+      snapped,
+      uploaded,
       screen: "Sharing"
     });
   };
-
+  handleBack = () => {
+    this.setState({
+      screen: "Logoing"
+    });
+  };
   render() {
-    const { data, business } = this.props;
-    if (this.state.screen === "Welcome") {
+    const { business } = this.props;
+    const {
+      screen,
+      top,
+      left,
+      snapshot,
+      logoedSnapshot,
+      snapped,
+      uploaded
+    } = this.state;
+    if (screen === "Welcome") {
       return (
         <Welcome
           business={business}
           initiateLogoing={this.handleInitiateLogoing}
         />
       );
-    } else if (this.state.screen === "Logoing") {
+    } else if (screen === "Logoing") {
       return (
         <Logoing
           business={business}
-          data={data}
-          noPermissions={this.handleNoPermissions}
+          top={top}
+          left={left}
+          snapshot={snapshot}
+          logoedSnapshot={logoedSnapshot}
+          snapped={snapped}
+          uploaded={uploaded}
           initiateSharing={this.handleInitiateSharing}
+          noPermissions={this.handleNoPermissions}
         />
       );
-    } else if (this.state.screen === "Sharing") {
-      return <Sharing business={business} data={data} />;
-    } else if (this.state.screen === "Returned") {
+    } else if (screen === "Sharing") {
+      return (
+        <Sharing
+          business={business}
+          top={top}
+          left={left}
+          snapshot={snapshot}
+          logoedSnapshot={logoedSnapshot}
+          snapped={snapped}
+          uploaded={uploaded}
+          initiateBack={this.handleBack}
+        />
+      );
+    } else if (screen === "Returned") {
       return <Returned business={business} />;
-    } else if (this.state.screen === "No Permissions") {
+    } else if (screen === "No Permissions") {
+      // TODO this needs to be rewritten because you don't have camera roll permission
+      // TODO for mobile web, it's just a file upload, so this is likely just going to find
+      // TODO its way to an FAQ at some point
       return (
         <p>
           Whoops! This app needs camera access or permission to read from the
