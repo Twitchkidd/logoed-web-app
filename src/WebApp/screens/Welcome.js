@@ -30,8 +30,8 @@ const businesses = {
   },
   demo: {
     name: "Demo biz!",
-    logo: require("../assets/afake-logo.png"),
-    handle: "@fakemafia"
+    logo: require("../assets/bonaire.png"),
+    handle: "@testbonaire"
   }
 };
 

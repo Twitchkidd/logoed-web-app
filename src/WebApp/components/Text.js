@@ -47,6 +47,7 @@ export const ButtonText = styled.span`
   font-size: 1.125em;
   font-weight: 600;
   line-height: 1.13636364em;
+  text-decoration: none;
 `;
 // Was 1.125 as of Button.Text version ... checkPlz ...
 

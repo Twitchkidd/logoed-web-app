@@ -7,11 +7,12 @@ import Returned from "./screens/Returned";
 export default class WebApp extends Component {
   state = {
     screen: "Welcome",
-    logoedSnapshot: null,
-    snapshot: null,
-    logo: null,
     top: 0,
-    left: 0
+    left: 0,
+    snapshot: null,
+    logoedSnapshot: null,
+    snapped: null,
+    uploaded: null
   };
   handleInitiateLogoing = () => {
     this.setState({ screen: "Logoing" });
@@ -76,8 +77,6 @@ export default class WebApp extends Component {
           left={left}
           snapshot={snapshot}
           logoedSnapshot={logoedSnapshot}
-          snapped={snapped}
-          uploaded={uploaded}
           initiateBack={this.handleBack}
         />
       );
