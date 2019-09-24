@@ -114,9 +114,10 @@ export default class Logoing extends Component {
     );
   };
   toLogoedOrNotToLogoed = () => {
-    const { left, right } = this.props;
-    const width = window.innerWidth;
-    const headerHeight = this.setState({ dragging: false, logoed: true });
+    // const { left, top } = this.props;
+    // const width = window.innerWidth;
+    // const headerHeight = this.setState({ dragging: false, logoed: true });
+    console.log("TODO!");
   };
   // >> CAMERA USAGE
   startCamera = () => {
@@ -273,7 +274,6 @@ export default class Logoing extends Component {
     this.paintCanvasStill("uploaded");
   };
   resetImage = () => {
-    const { snapshot } = this.state;
     let isReplacePhotoConfirmed = window.confirm("Replace photo?");
     if (!isReplacePhotoConfirmed) {
       return;

@@ -142,17 +142,10 @@ export default class Sharing extends Component {
   };
   onShare = () => {
     window.location = "instagram://library?AssetPath=null";
+    // If this gets clicked like 5 times or whatever, we should have a backup.
   };
   render() {
-    const {
-      business,
-      top,
-      left,
-      snapshot,
-      logoedSnapshot,
-      modalin,
-      ready
-    } = this.state;
+    const { business, logoedSnapshot, modalin, ready } = this.state;
     return (
       <ScreenWrapper>
         <Header>
