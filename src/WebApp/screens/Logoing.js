@@ -21,7 +21,7 @@ import {
   VideoWrapper
 } from "../components";
 import Moveable from "react-moveable";
-import logoedLogo from "../assets/logo-1x.png";
+import logoedLogo from "../assets/logoedLogoLongForm.png";
 
 const businesses = {
   Burgerology: {

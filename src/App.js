@@ -6,7 +6,7 @@ import {
   Redirect
 } from "react-router-dom";
 import LandingPage from "./LandingPage";
-import DashboardSite from "./DashboardSite";
+import Dashboard from "./Dashboard";
 import AdminSite from "./AdminSite";
 import WebApp from "./WebApp";
 import Loading from "./WebApp/screens/Loading";
@@ -49,7 +49,7 @@ class App extends Component {
                 />
               )}
             />
-            <Route path='/Dashboard' component={DashboardSite} />
+            <Route path='/Dashboard' component={Dashboard} />
             <Route path='/Admin' component={AdminSite} />
             <Route exact path='/' component={LandingPage} />
             <Redirect to='/' />

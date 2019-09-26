@@ -10,7 +10,7 @@ import {
   ToSBar,
   ToSLink
 } from "../components";
-import logoedLogo from "../assets/logo-1x.png";
+import logoedLogo from "../assets/logoedLogoLongForm.png";
 
 const businesses = {
   Burgerology: {

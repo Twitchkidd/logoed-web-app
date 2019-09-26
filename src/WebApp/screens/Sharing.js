@@ -20,7 +20,7 @@ import {
 } from "../components";
 import ReactTooltip from "react-tooltip";
 import Modal from "react-modal";
-import logoedLogo from "../assets/logo-1x.png";
+import logoedLogo from "../assets/logoedLogoLongForm.png";
 
 const businesses = {
   Burgerology: {
