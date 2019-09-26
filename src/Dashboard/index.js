@@ -39,7 +39,13 @@ export default class Dashboard extends Component {
   };
   */
   render() {
-    return <div>Dashboard!</div>;
+    return (
+      <div style={{ width: "100vw", height: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
+        <div style={{width: "500px", height: "400px", display: "flex", justifyContent: "center", alignItems: "center", background: "#16161D" }}>
+          <p style={{ color: "#FAFAFB", fontSize: 42 }}>Dashboard!</p>
+        </div>
+      </div>
+    );
     /*
     const { business } = this.props;
     const {
