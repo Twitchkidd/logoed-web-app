@@ -9,6 +9,21 @@ import {
   serif
 } from "../../utilities";
 
+const fontSizes = ["1em", "1.111em", "1.125em", "1.375em", "1.675em", "2em"];
+// 16 .. 17 or 18 ..  18  .. ..   22   .. ..  27  .. ..  32
+
+const lineHeights = [
+  "I have no idea why the line heights are like that",
+  "I'd gotten this all from an article",
+  "but the line heights thing escapes me",
+  "so I'm going to just adjust it by eye",
+  "TODO!",
+  "// UPDATE! Figma just like, *taught* me line heights!",
+  "// Basically, a line height of 120% for a font size of ...",
+  "// 22px yields a one line text element with a height of 26px!",
+  "// It's additive!"
+];
+
 export const InstructionalText = styled.p`
   ${sans}
   color: ${props => (props.light ? mostlyWhite : eigengrau)};
@@ -18,17 +33,8 @@ export const InstructionalText = styled.p`
   text-align: center;
 `;
 
-/*
-import styled from "styled-components";
-import {
-  blue,
-  eigengrau,
-  crayGray,
-  instagram,
-  mostlyWhite,
-  sans,
-  serif
-} from "../../utilities";
+// const Tagline;
+// const Brand;
 
 export const BiggerPresentationalText = styled.p`
   ${serif}
@@ -43,6 +49,19 @@ export const PresentationalText = styled.p`
   font-size: 1.375em;
   line-height: 1.15384615em;
 `;
+
+/*
+import styled from "styled-components";
+import {
+  blue,
+  eigengrau,
+  crayGray,
+  instagram,
+  mostlyWhite,
+  sans,
+  serif
+} from "../../utilities";
+
 
 export const InstructionalText = styled.p`
   ${sans}

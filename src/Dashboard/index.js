@@ -1,6 +1,8 @@
 // >> GO GO POWER RANGERS!!!!!
 
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
+import { Helmet } from "react-helmet";
+import { ModalinCard, ModalinBackground } from "./components";
 /*
 import Welcome from "./screens/Welcome";
 import Logoing from "./screens/Logoing";
@@ -12,6 +14,40 @@ export default class Dashboard extends Component {
   state = {
     screen: "Initial Signup"
     // data and shared state
+  };
+  onAuth = () => {
+    console.log("Do stuff.");
+  };
+  onWelcome = () => {
+    console.log(
+      "wait a second before fading out the text and switching it to modalin and logo n handle"
+    );
+  };
+  onLogoUpload = () => {
+    console.log("Do stuff.");
+  };
+  onHandleUpload = () => {
+    console.log(
+      "google react controlled input or see how you did it previously"
+    );
+  };
+  onSubmitLogoNHandle = () => {
+    console.log("Do stuff.");
+  };
+  onSetRaffle = () => {
+    console.log("Do stuff.");
+  };
+  onSetTableTent = () => {
+    console.log("Do stuff.");
+  };
+  onSubmitRaffleNTableTent = () => {
+    console.log("Do stuff.");
+  };
+  onToggleNavBarNavigation = tab => {
+    console.log(`Do stuff with ${tab}.`);
+  };
+  whatDidIDoWithTheLastSetOfInstructionsRegardingTopBarIcons = () => {
+    console.log("?");
   };
   /*
   handleInitiateNextScreen = () => {
@@ -40,11 +76,31 @@ export default class Dashboard extends Component {
   */
   render() {
     return (
-      <div style={{ width: "100vw", height: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
-        <div style={{width: "500px", height: "400px", display: "flex", justifyContent: "center", alignItems: "center", background: "#16161D" }}>
-          <p style={{ color: "#FAFAFB", fontSize: 42 }}>Dashboard!</p>
+      <Fragment>
+        <Helmet>
+          <title>Logoed Dash!</title>
+        </Helmet>
+        <div
+          style={{
+            width: "100vw",
+            height: "100vh",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center"
+          }}>
+          <div
+            style={{
+              width: "500px",
+              height: "400px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              background: "#16161D"
+            }}>
+            <p style={{ color: "#FAFAFB", fontSize: 42 }}>Dashboard!</p>
+          </div>
         </div>
-      </div>
+      </Fragment>
     );
     /*
     const { business } = this.props;
