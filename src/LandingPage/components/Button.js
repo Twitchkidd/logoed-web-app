@@ -9,9 +9,3 @@ export const Button = styled.button`
   height: 6.5em;
   width: 12em;
 `;
-
-Button.Text = styled.span`
-  font-family: ${sans};
-  font-size: 1.125em;
-  color: ${mostlyWhite};
-`;

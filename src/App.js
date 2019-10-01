@@ -19,6 +19,11 @@ class App extends Component {
   handleSetBusiness = business => {
     this.setState({ business });
   };
+  handleSignUp = data => {
+    this.sendOff(data)
+      .then("yay")
+      .catch("nay");
+  };
   render() {
     return (
       <Router>
@@ -51,7 +56,13 @@ class App extends Component {
             />
             <Route path='/Dashboard' component={Dashboard} />
             <Route path='/Admin' component={AdminSite} />
-            <Route exact path='/' component={LandingPage} />
+            <Route
+              exact
+              path='/'
+              render={props => (
+                <LandingPage {...props} signUp={this.handleSignUp} />
+              )}
+            />
             <Redirect to='/' />
           </Switch>
         )}

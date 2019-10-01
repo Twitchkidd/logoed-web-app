@@ -1,17 +1,13 @@
 import React, { Component, Fragment } from "react";
-import styled, { css } from "styled-components";
-import logo from "./Logo228.png";
-import longLogo from "./LongLogo478.png";
-import { H1, P, Button } from "./components";
-
-const LandingGrid = styled.div`
-  height: 100vh;
-  width: 100vw;
-  display: grid;
-  grid-template-columns: ${props =>
-    props.signUpMode ? "290px 1fr 50vw 1fr" : "40vw 1fr 1fr"};
-  grid-template-rows: ${props => (props.signUpMode ? "1fr" : "33vh 33vh 34vh")};
-`;
+import {
+  Button,
+  ButtonText,
+  Heading,
+  LogoedLogoLongForm,
+  LogoedLogoSquareForm,
+  PresentationalText,
+  ScreenWrapper
+} from "./components";
 
 const BuffMcBigBox = styled.div`
   grid-column: ${props => (props.signUpMode ? "1 / span 1" : "1 / span 1")};
@@ -25,6 +21,7 @@ const BuffMcBigBox = styled.div`
   z-index: 1;
 `;
 
+// Those should be functions lol
 const Logo = styled.div`
   height: ${props => (props.signUpMode ? "114px" : "228px")};
   width: ${props => (props.signUpMode ? "114px" : "228px")};
@@ -52,11 +49,11 @@ const ContentWrapper = styled.main`
 
 export default class LandingPage extends Component {
   state = {
-    signUpModeGo: false
+    signUpMode: false
   };
-  signUp = () => {
+  initiateSignUp = () => {
     this.setState({
-      signUpModeGo: true
+      signUpMode: true
     });
   };
   submit = () => {
@@ -65,9 +62,9 @@ export default class LandingPage extends Component {
   render() {
     const { signUpModeGo } = this.state;
     return (
-      <LandingGrid signUpMode={signUpModeGo}>
-        <BuffMcBigBox signUpMode={signUpModeGo}>
-          <Logo signUpMode={signUpModeGo}>
+      <LandingGrid signUpMode={signUpMode}>
+        <BuffMcBigBox signUpMode={signUpMode}>
+          <Logo signUpMode={signUpMode}>
             <img
               src={logo}
               style={{ height: "100%", width: "100%" }}
@@ -75,8 +72,8 @@ export default class LandingPage extends Component {
             />
           </Logo>
         </BuffMcBigBox>
-        <ContentWrapper signUpMode={signUpModeGo}>
-          {signUpModeGo ? (
+        <ContentWrapper signUpMode={signUpMode}>
+          {signUpMode ? (
             <Fragment>
               <img src={longLogo} alt='Logoed Logo' />
               <div style={{ paddingLeft: "2em" }}>
@@ -92,11 +89,10 @@ export default class LandingPage extends Component {
           ) : (
             <Fragment>
               <H1>Logoed</H1>
-
               <P>Make your advertizing hit home</P>
               <P>With user generated content and</P>
               <P>Level up your social media game, with Logoed</P>
-              <Button onClick={() => this.signUp()}>
+              <Button onClick={() => this.initiateSignUp()}>
                 <strong>
                   <Button.Text>Sign Up!</Button.Text>
                 </strong>

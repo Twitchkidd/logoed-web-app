@@ -4,6 +4,7 @@ import {
   eigengrau,
   crayGray,
   instagram,
+  lightGray,
   mostlyWhite,
   sans,
   serif
@@ -33,8 +34,7 @@ export const InstructionalText = styled.p`
   text-align: center;
 `;
 
-// const Tagline;
-// const Brand;
+export const Brand = styled.p``;
 
 export const BiggerPresentationalText = styled.p`
   ${serif}
@@ -48,6 +48,35 @@ export const PresentationalText = styled.p`
   color: ${props => (props.light ? mostlyWhite : eigengrau)};
   font-size: 1.375em;
   line-height: 1.15384615em;
+`;
+
+export const Tagline = styled.p`
+  ${sans}
+  font-size: 22;
+  line-height: 1.25em;
+  color: ${mostlyWhite};
+`;
+
+export const ContactLinkButton = styled.span`
+  ${sans}
+  font-size: 17;
+  line-height: 1.14em;
+  transition: color: 0.2s;
+  color: ${lightGray};
+  :hover {
+    color: ${mostlyWhite};
+  }
+`;
+
+export const NavBarItemText = styled.span`
+  ${sans}
+  font-size: 22;
+  color: ${lightGray};
+  opacity: ${props => (props.initialSignUp ? 0.2 : 1.0)};
+  :hover {
+    color: ${mostlyWhite};
+  }
+  transition: color 0.2s;
 `;
 
 /*
@@ -86,7 +115,7 @@ export const ButtonText = styled.span`
     props.disabled ? crayGray : props.primary ? mostlyWhite : blue};
   font-size: 1.125em;
   font-weight: 600;
-  line-height: 1.13636364em;
+  line-height: 1.14em;
   text-decoration: none;
 `;
 // Was 1.125 as of Button.Text version ... checkPlz ...

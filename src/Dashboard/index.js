@@ -2,18 +2,20 @@
 
 import React, { Component, Fragment } from "react";
 import { Helmet } from "react-helmet";
-import { ModalinCard, ModalinBackground } from "./components";
-/*
-import Welcome from "./screens/Welcome";
-import Logoing from "./screens/Logoing";
-import Sharing from "./screens/Sharing";
-import Returned from "./screens/Returned";
-*/
+import {
+  Brand,
+  ModalinCard,
+  ModalinBackground,
+  NavBar,
+  ScreenWrapper,
+  TagLine
+} from "./components";
+import { InititalSignUpModal } from "./views";
 
 export default class Dashboard extends Component {
   state = {
-    screen: "Initial Signup"
-    // data and shared state
+    screen: "Initial Signup",
+    initialSignUp: true
   };
   onAuth = () => {
     console.log("Do stuff.");
@@ -75,34 +77,59 @@ export default class Dashboard extends Component {
   };
   */
   render() {
+    const { initialSignUp } = this.state;
     return (
       <Fragment>
         <Helmet>
           <title>Logoed Dash!</title>
         </Helmet>
-        <div
-          style={{
-            width: "100vw",
-            height: "100vh",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center"
-          }}>
-          <div
-            style={{
-              width: "500px",
-              height: "400px",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              background: "#16161D"
-            }}>
-            <p style={{ color: "#FAFAFB", fontSize: 42 }}>Dashboard!</p>
-          </div>
-        </div>
+        <ScreenWrapper>
+          <NavBar initialSignUp={initialSignUp}>
+            <LogoedLogoLongForm initialSignUp={initialSignUp} />
+            {initialSignUp ? <TagLine /> : <NavBarLinkMap />}
+            <ContactLinkButton />
+          </NavBar>
+          <MainWrapper>
+            {modalin ? <Modal screen={screen} /> : null}
+            <TopBar>
+              {something ? <Brand screen={screen} /> : null}
+              {logo ? <Logo /> : <LogoPlaceHolder />}
+              <BusinessName>{businessName}</BusinessName>
+              <IconSetMap />
+            </TopBar>
+            <ContentWrapper>
+              <Content screen={screen} />>
+            </ContentWrapper>
+          </MainWrapper>
+        </ScreenWrapper>
       </Fragment>
     );
-    /*
+  }
+}
+
+/*
+      <div
+        style={{
+          width: "100vw",
+          height: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center"
+        }}>
+        <div
+          style={{
+            width: "500px",
+            height: "400px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            background: "#16161D"
+          }}>
+          <p style={{ color: "#FAFAFB", fontSize: 42 }}>Dashboard!</p>
+        </div>
+      </div>
+    */
+/*
     const { business } = this.props;
     const {
       screen,
@@ -162,5 +189,3 @@ export default class Dashboard extends Component {
       );
     }
     */
-  }
-}

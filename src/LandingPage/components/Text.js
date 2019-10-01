@@ -1,6 +1,30 @@
 import styled from "styled-components";
 import { serif, sans, mostlyWhite, eigengrau } from "../../utilities";
 
+export const Heading = styled.h1`
+  ${serif}
+  color: ${eigengrau};
+  font-size: 2em;
+  line-height: 1.25em;
+`;
+
+export const PresentationalText = styled.p`
+  ${sans}
+  color: ${eigengrau};
+  font-size: 1.375em;
+  line-height: 1.15384615em;
+`;
+
+export const ButtonText = styled.span`
+  ${sans}
+  color: ${props =>
+    props.disabled ? crayGray : props.primary ? mostlyWhite : blue};
+  font-size: 1.125em;
+  font-weight: 600;
+  line-height: 1.14em;
+`;
+
+/*
 export const H1 = styled.h1`
   ${serif}
   color: ${props => (props.light ? mostlyWhite : eigengrau)};
@@ -35,3 +59,4 @@ export const P = styled.p`
   font-size: 1em;
   line-height: 1.25em;
 `;
+*/
