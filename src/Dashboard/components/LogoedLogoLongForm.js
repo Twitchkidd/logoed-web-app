@@ -1,15 +1,13 @@
 import styled from "styled-components";
+import logoedLogo from "../LongLogo478.png";
 import { maroon } from "../../utilities";
-import logoedLogo from "../Logo228.png";
 
-export const LogoedLogoSquareForm = styled.div`
+export const LogoedLogoLongForm = styled.div`
   background-image: url(${logoedLogo});
   background-color: ${maroon};
-  height: 228px;
-  width: 228px;
+  height: 10vh;
   border-radius: 3vh;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  z-index: 2;
 `;

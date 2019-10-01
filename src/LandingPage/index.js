@@ -11,10 +11,13 @@ import {
   PresentationalText,
   ScreenWrapper
 } from "./components";
+import logo from "./Logo228.png";
+import longLogo from "./LongLogo478.png";
 
 export default class LandingPage extends Component {
   state = {
-    signUpMode: false
+    signUpMode: false,
+    ready: false
   };
   initiateSignUp = () => {
     this.setState({
@@ -25,9 +28,9 @@ export default class LandingPage extends Component {
     console.log("boop!");
   };
   render() {
-    const { signUpModeGo } = this.state;
+    const { signUpMode } = this.state;
     return (
-      <LandingGrid signUpMode={signUpMode}>
+      <ScreenWrapper signUpMode={signUpMode}>
         <BuffMcBigBox signUpMode={signUpMode}>
           <Logo signUpMode={signUpMode}>
             <img
@@ -42,10 +45,10 @@ export default class LandingPage extends Component {
             <Fragment>
               <img src={longLogo} alt='Logoed Logo' />
               <div style={{ paddingLeft: "2em" }}>
-                <H1>Welcome!</H1>
-                <P>Test!</P>
-                <P>Test!</P>
-                <P>Test!</P>
+                <Heading>Welcome!</Heading>
+                <PresentationalText>Test!</PresentationalText>
+                <PresentationalText>Test!</PresentationalText>
+                <PresentationalText>Test!</PresentationalText>
                 <Button onClick={() => this.submit()}>
                   <Button.Text>Boop!</Button.Text>
                 </Button>
@@ -53,10 +56,16 @@ export default class LandingPage extends Component {
             </Fragment>
           ) : (
             <Fragment>
-              <H1>Logoed</H1>
-              <P>Make your advertizing hit home</P>
-              <P>With user generated content and</P>
-              <P>Level up your social media game, with Logoed</P>
+              <Heading>Logoed</Heading>
+              <PresentationalText>
+                Make your advertizing hit home
+              </PresentationalText>
+              <PresentationalText>
+                With user generated content and
+              </PresentationalText>
+              <PresentationalText>
+                Level up your social media game, with Logoed
+              </PresentationalText>
               <Button onClick={() => this.initiateSignUp()}>
                 <strong>
                   <Button.Text>Sign Up!</Button.Text>
@@ -65,7 +74,7 @@ export default class LandingPage extends Component {
             </Fragment>
           )}
         </ContentWrapper>
-      </LandingGrid>
+      </ScreenWrapper>
     );
   }
 }

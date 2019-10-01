@@ -56,6 +56,7 @@ class App extends Component {
             />
             <Route path='/Dashboard' component={Dashboard} />
             <Route path='/Admin' component={AdminSite} />
+            {/* In the above two, please check if authed, lol ... */}
             <Route
               exact
               path='/'

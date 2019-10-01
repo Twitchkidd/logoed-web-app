@@ -43,9 +43,16 @@ export const BiggerPresentationalText = styled.p`
   line-height: 1.25em;
 `;
 
+export const BusinessName = styled.p`
+  ${serif}
+  color: ${eigengrau};
+  font-size: 1.375em;
+  line-height: 1.154em;
+`;
+
 export const TagLine = styled.p`
   ${sans}
-  font-size: 22;
+  font-size: 1.375em;
   line-height: 1.25em;
   color: ${mostlyWhite};
 `;
@@ -54,7 +61,7 @@ export const PresentationalText = styled.p`
   ${serif}
   color: ${props => (props.light ? mostlyWhite : eigengrau)};
   font-size: 1.375em;
-  line-height: 1.15384615em;
+  line-height: 1.154em;
 `;
 
 export const ContactLinkButton = styled.span`

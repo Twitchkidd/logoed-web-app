@@ -4,18 +4,26 @@ import React, { Component, Fragment } from "react";
 import { Helmet } from "react-helmet";
 import {
   Brand,
-  ModalinCard,
+  BusinessName,
+  ContactLinkButton,
+  LogoedLogoLongForm,
+  MainWrapper,
   ModalinBackground,
+  ModalinCard,
   NavBar,
+  NavBarItem,
   ScreenWrapper,
-  TagLine
+  TagLine,
+  TopBar
 } from "./components";
 import { InititalSignUpModal } from "./views";
 
 export default class Dashboard extends Component {
   state = {
-    screen: "Initial Signup",
-    initialSignUp: true
+    businessName: "HERP",
+    logo: null,
+    modalin: true,
+    screen: "Initial Signup"
   };
   onAuth = () => {
     console.log("Do stuff.");
@@ -77,22 +85,22 @@ export default class Dashboard extends Component {
   };
   */
   render() {
-    const { initialSignUp } = this.state;
+    const { businessName, logo, modalin, screen } = this.state;
     return (
       <Fragment>
         <Helmet>
           <title>Logoed Dash!</title>
         </Helmet>
         <ScreenWrapper>
-          <NavBar initialSignUp={initialSignUp}>
-            <LogoedLogoLongForm initialSignUp={initialSignUp} />
-            {initialSignUp ? <TagLine /> : <NavBarLinkMap />}
+          <NavBar initialSignUp={modalin}>
+            <LogoedLogoLongForm initialSignUp={modalin} />
+            {modalin ? <TagLine /> : <NavBarLinkMap />}
             <ContactLinkButton />
           </NavBar>
           <MainWrapper>
             {modalin ? <Modal screen={screen} /> : null}
             <TopBar>
-              {something ? <Brand screen={screen} /> : null}
+              {modalin ? <Brand screen={screen} /> : null}
               {logo ? <Logo /> : <LogoPlaceHolder />}
               <BusinessName>{businessName}</BusinessName>
               <IconSetMap />
