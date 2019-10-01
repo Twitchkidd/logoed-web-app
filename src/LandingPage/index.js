@@ -1,51 +1,16 @@
 import React, { Component, Fragment } from "react";
 import {
+  BuffMcBigBox,
   Button,
   ButtonText,
+  ContentWrapper,
   Heading,
+  Logo,
   LogoedLogoLongForm,
   LogoedLogoSquareForm,
   PresentationalText,
   ScreenWrapper
 } from "./components";
-
-const BuffMcBigBox = styled.div`
-  grid-column: ${props => (props.signUpMode ? "1 / span 1" : "1 / span 1")};
-  grid-row: ${props => (props.signUpMode ? "1 / span 1" : "2 / span 2")};
-  background-color: #253047;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  z-index: 1;
-`;
-
-// Those should be functions lol
-const Logo = styled.div`
-  height: ${props => (props.signUpMode ? "114px" : "228px")};
-  width: ${props => (props.signUpMode ? "114px" : "228px")};
-  position: ${props => (props.signUpMode ? "static" : "absolute")};
-  ${props =>
-    props.signUpMode
-      ? css`
-          margin-top: 88px;
-        `
-      : css`
-          left: 20vw;
-          top: -114px;
-        `}
-  z-index: 2;
-`;
-
-const ContentWrapper = styled.main`
-  grid-column: ${props => (props.signUpMode ? "3 / span 1" : "2 / span 1")};
-  grid-row: ${props => (props.signUpMode ? "1 / span 1" : "1 / span 3")};
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: ${props => (props.signUpMode ? "flex-start" : "flex-end")};
-`;
 
 export default class LandingPage extends Component {
   state = {

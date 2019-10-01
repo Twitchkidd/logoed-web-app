@@ -43,18 +43,18 @@ export const BiggerPresentationalText = styled.p`
   line-height: 1.25em;
 `;
 
+export const TagLine = styled.p`
+  ${sans}
+  font-size: 22;
+  line-height: 1.25em;
+  color: ${mostlyWhite};
+`;
+
 export const PresentationalText = styled.p`
   ${serif}
   color: ${props => (props.light ? mostlyWhite : eigengrau)};
   font-size: 1.375em;
   line-height: 1.15384615em;
-`;
-
-export const Tagline = styled.p`
-  ${sans}
-  font-size: 22;
-  line-height: 1.25em;
-  color: ${mostlyWhite};
 `;
 
 export const ContactLinkButton = styled.span`

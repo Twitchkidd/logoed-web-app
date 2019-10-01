@@ -1,5 +1,12 @@
 import styled from "styled-components";
-import { serif, sans, mostlyWhite, eigengrau } from "../../utilities";
+import {
+  crayGray,
+  blue,
+  serif,
+  sans,
+  mostlyWhite,
+  eigengrau
+} from "../../utilities";
 
 export const Heading = styled.h1`
   ${serif}
@@ -22,6 +29,13 @@ export const ButtonText = styled.span`
   font-size: 1.125em;
   font-weight: 600;
   line-height: 1.14em;
+`;
+
+export const TagLine = styled.p`
+  ${sans}
+  font-size: 22;
+  line-height: 1.25em;
+  color: ${mostlyWhite};
 `;
 
 /*
