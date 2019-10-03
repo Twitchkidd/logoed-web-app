@@ -14,16 +14,22 @@ import Global from "./Global";
 
 class App extends Component {
   state = {
+    authed: false,
+    authType: null,
     business: null
   };
   handleSetBusiness = business => {
     this.setState({ business });
   };
   handleSignUp = data => {
-    this.sendOff(data)
-      .then("yay")
-      .catch("nay");
+    // this.sendOff(data)
+    //   .then("yay")
+    //   .catch("nay");
+    console.log("Beep!");
   };
+  componentDidMount() {
+    console.log("Boop!");
+  }
   render() {
     return (
       <Router>
@@ -57,6 +63,7 @@ class App extends Component {
             <Route path='/Dashboard' component={Dashboard} />
             <Route path='/Admin' component={AdminSite} />
             {/* In the above two, please check if authed, lol ... */}
+            {/* Oh, please beneath, too, haha ... */}
             <Route
               exact
               path='/'

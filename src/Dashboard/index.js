@@ -1,5 +1,3 @@
-// >> GO GO POWER RANGERS!!!!!
-
 import React, { Component, Fragment } from "react";
 import { Helmet } from "react-helmet";
 import {
@@ -86,6 +84,22 @@ export default class Dashboard extends Component {
   */
   render() {
     const { businessName, logo, modalin, screen } = this.state;
+    const NavBarListMap = () => {
+      const navBarList = [
+        "Stats",
+        "Profile",
+        "Raffle"
+      ];
+      return (
+        <ul>
+        {
+          navBarList.map((navBarItem, i) => (
+            <NavBarItem key={i}>{navBarItem}</NavBarItem>
+          ))
+        }
+        </ul>
+      );
+    };
     return (
       <Fragment>
         <Helmet>
@@ -94,8 +108,10 @@ export default class Dashboard extends Component {
         <ScreenWrapper>
           <NavBar initialSignUp={modalin}>
             <LogoedLogoLongForm initialSignUp={modalin} />
-            {modalin ? <TagLine /> : <NavBarLinkMap />}
-            <ContactLinkButton />
+            {modalin ? <TagLine>Tagline text!</TagLine> : (
+              
+            )}
+            {modalin ? <ContactLinkButton>Contact</ContactLinkButton> : <DemoGroup />}
           </NavBar>
           <MainWrapper>
             {modalin ? <Modal screen={screen} /> : null}
