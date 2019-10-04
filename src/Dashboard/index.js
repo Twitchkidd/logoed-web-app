@@ -9,7 +9,7 @@ import {
   ModalinBackground,
   ModalinCard,
   NavBar,
-  NavBarItem,
+  NavBarListMap,
   ScreenWrapper,
   TagLine,
   TopBar
@@ -22,6 +22,23 @@ export default class Dashboard extends Component {
     logo: null,
     modalin: true,
     screen: "Initial Signup"
+  };
+  componentDidMount() {
+    const { match, setInitialDashboardBusiness } = this.props;
+    if (
+      checkMockServer(match.params.DashboardBusiness) !==
+      "Error! Can't find business in Logoed database!"
+    ) {
+      setInitialDashboardBusiness(match.params.DashboardBusiness);
+    }
+  }
+  checkMockServer = dashboardBusiness => {
+    const businesses = ["Burgerology", "Jonathans", "Leilu"];
+    if (businesses.includes(dashboardBusiness)) {
+      return dashboardBusiness;
+    } else {
+      return "Error! Can't find business in Logoed database!";
+    }
   };
   onAuth = () => {
     console.log("Do stuff.");
@@ -57,49 +74,8 @@ export default class Dashboard extends Component {
   whatDidIDoWithTheLastSetOfInstructionsRegardingTopBarIcons = () => {
     console.log("?");
   };
-  /*
-  handleInitiateNextScreen = () => {
-    this.setState({ screen: "Next Screen" });
-  };
-  handleNoPermissions = () => {
-    this.setState({ screen: "No Permissions" });
-  };
-  handleInitiateSharing = data => {
-    const { top, left, snapshot, logoedSnapshot, snapped, uploaded } = data;
-    this.setState({
-      top,
-      left,
-      snapshot,
-      logoedSnapshot,
-      snapped,
-      uploaded,
-      screen: "Sharing"
-    });
-  };
-  handleBack = () => {
-    this.setState({
-      screen: "Logoing"
-    });
-  };
-  */
   render() {
     const { businessName, logo, modalin, screen } = this.state;
-    const NavBarListMap = () => {
-      const navBarList = [
-        "Stats",
-        "Profile",
-        "Raffle"
-      ];
-      return (
-        <ul>
-        {
-          navBarList.map((navBarItem, i) => (
-            <NavBarItem key={i}>{navBarItem}</NavBarItem>
-          ))
-        }
-        </ul>
-      );
-    };
     return (
       <Fragment>
         <Helmet>
@@ -108,10 +84,12 @@ export default class Dashboard extends Component {
         <ScreenWrapper>
           <NavBar initialSignUp={modalin}>
             <LogoedLogoLongForm initialSignUp={modalin} />
-            {modalin ? <TagLine>Tagline text!</TagLine> : (
-              
+            {modalin ? <TagLine>Tagline text!</TagLine> : <NavBarListMap />}
+            {modalin ? (
+              <ContactLinkButton>Contact</ContactLinkButton>
+            ) : (
+              <DemoGroup />
             )}
-            {modalin ? <ContactLinkButton>Contact</ContactLinkButton> : <DemoGroup />}
           </NavBar>
           <MainWrapper>
             {modalin ? <Modal screen={screen} /> : null}
@@ -130,86 +108,3 @@ export default class Dashboard extends Component {
     );
   }
 }
-
-/*
-      <div
-        style={{
-          width: "100vw",
-          height: "100vh",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center"
-        }}>
-        <div
-          style={{
-            width: "500px",
-            height: "400px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            background: "#16161D"
-          }}>
-          <p style={{ color: "#FAFAFB", fontSize: 42 }}>Dashboard!</p>
-        </div>
-      </div>
-    */
-/*
-    const { business } = this.props;
-    const {
-      screen,
-      top,
-      left,
-      snapshot,
-      logoedSnapshot,
-      snapped,
-      uploaded
-    } = this.state;
-    if (screen === "Welcome") {
-      return (
-        <Welcome
-          business={business}
-          initiateLogoing={this.handleInitiateLogoing}
-        />
-      );
-    } else if (screen === "Logoing") {
-      return (
-        <Logoing
-          business={business}
-          top={top}
-          left={left}
-          snapshot={snapshot}
-          logoedSnapshot={logoedSnapshot}
-          snapped={snapped}
-          uploaded={uploaded}
-          initiateSharing={this.handleInitiateSharing}
-          noPermissions={this.handleNoPermissions}
-        />
-      );
-    } else if (screen === "Sharing") {
-      return (
-        <Sharing
-          business={business}
-          top={top}
-          left={left}
-          snapshot={snapshot}
-          logoedSnapshot={logoedSnapshot}
-          initiateBack={this.handleBack}
-        />
-      );
-    } else if (screen === "Returned") {
-      return <Returned business={business} />;
-    } else if (screen === "No Permissions") {
-      // TODO this needs to be rewritten because you don't have camera roll permission
-      // TODO for mobile web, it's just a file upload, so this is likely just going to find
-      // TODO its way to an FAQ at some point
-      return (
-        <p>
-          Whoops! This app needs camera access or permission to read from the
-          camera roll to work! Please restart the browser and hit the qr code
-          again to give it another try! Sorry, we can't find another way to
-          reset it than works other than closing the whole browser session (all
-          tabs) :(
-        </p>
-      );
-    }
-    */

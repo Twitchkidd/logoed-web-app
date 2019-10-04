@@ -16,10 +16,15 @@ class App extends Component {
   state = {
     authed: false,
     authType: null,
-    business: null
+    business: null,
+    initialDashboardBusiness: null
   };
   handleSetBusiness = business => {
     this.setState({ business });
+  };
+  handleSetInitialDashboardBusiness = initialDashboardBusiness => {
+    this.setState({ initialDashboardBusiness });
+    // This is stupid, I need to link to auth ...
   };
   handleSignUp = data => {
     // this.sendOff(data)
@@ -31,15 +36,14 @@ class App extends Component {
     console.log("Boop!");
   }
   render() {
+    const { business, dashboardBusiness } = this.state;
     return (
       <Router>
         <Global />
-        {this.state.business ? (
+        {business ? (
           <Route
             path='/App'
-            render={props => (
-              <WebApp {...props} business={this.state.business} />
-            )}
+            render={props => <WebApp {...props} business={business} />}
           />
         ) : (
           <Switch>
@@ -60,10 +64,20 @@ class App extends Component {
                 />
               )}
             />
-            <Route path='/Dashboard' component={Dashboard} />
+            <Route
+              path='/Dashboard/:DashboardBusiness'
+              render={props => (
+                <Dashboard
+                  {...props}
+                  setInitialDashboardBusiness={
+                    this.handleSetInitialDashboardBusiness
+                  }
+                  initialDashboardBusiness={initialDashboardBusiness}
+                />
+              )}
+            />
+            <Route path='/Dashboard' exact component={Dashboard} />
             <Route path='/Admin' component={AdminSite} />
-            {/* In the above two, please check if authed, lol ... */}
-            {/* Oh, please beneath, too, haha ... */}
             <Route
               exact
               path='/'
