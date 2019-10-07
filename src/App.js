@@ -12,6 +12,11 @@ import WebApp from "./WebApp";
 import Loading from "./WebApp/screens/Loading";
 import Global from "./Global";
 
+// Consider keeping auth within the various routes.
+// Auth0 redirects to urls on auth/out/error, so
+// App.js should have handler functions, but not
+// keep track of auth itself.
+
 class App extends Component {
   state = {
     authed: false,
@@ -35,6 +40,12 @@ class App extends Component {
   componentDidMount() {
     console.log("Boop!");
   }
+  // If business is true, you only get one route,
+  // what happens if you navigate to / then?
+  // This is dumb and should be refactored.
+  // For STARTERS, put the conditional inside the switch!
+  // PUSHBACK, well if it's AUTHED, then BUSINESS!
+  // {{throwsChair}}
   render() {
     const { business, dashboardBusiness } = this.state;
     return (
