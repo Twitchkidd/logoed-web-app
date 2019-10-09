@@ -1,6 +1,6 @@
 // import React from "react";
 import styled from "styled-components";
-import { darkBlue, sans, mostlyWhite } from "../../utilities";
+import { darkBlue } from "../../utilities";
 
 export const Button = styled.button`
   border-radius: 12px;

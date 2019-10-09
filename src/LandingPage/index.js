@@ -2,12 +2,12 @@ import React, { Component, Fragment } from "react";
 import {
   BuffMcBigBox,
   Button,
-  ButtonText,
+  // ButtonText,
   ContentWrapper,
   Heading,
   Logo,
-  LogoedLogoLongForm,
-  LogoedLogoSquareForm,
+  // LogoedLogoLongForm,
+  // LogoedLogoSquareForm,
   PresentationalText,
   ScreenWrapper
 } from "./components";

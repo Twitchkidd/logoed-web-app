@@ -6,7 +6,7 @@ import {
   Redirect
 } from "react-router-dom";
 import LandingPage from "./LandingPage";
-import Dashboard from "./Dashboard";
+// import Dashboard from "./Dashboard";
 import AdminSite from "./AdminSite";
 import WebApp from "./WebApp";
 import Loading from "./WebApp/screens/Loading";
@@ -47,7 +47,7 @@ class App extends Component {
   // PUSHBACK, well if it's AUTHED, then BUSINESS!
   // {{throwsChair}}
   render() {
-    const { business, dashboardBusiness } = this.state;
+    const { business } = this.state;
     return (
       <Router>
         <Global />
@@ -75,6 +75,7 @@ class App extends Component {
                 />
               )}
             />
+            {/*
             <Route
               path='/Dashboard/:DashboardBusiness'
               render={props => (
@@ -88,6 +89,7 @@ class App extends Component {
               )}
             />
             <Route path='/Dashboard' exact component={Dashboard} />
+            */}
             <Route path='/Admin' component={AdminSite} />
             <Route
               exact

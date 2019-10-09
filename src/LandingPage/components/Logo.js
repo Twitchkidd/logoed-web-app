@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export const Logo = styled.div`
   height: ${props => (props.signUpMode ? "114px" : "228px")};
