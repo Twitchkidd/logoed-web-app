@@ -93,7 +93,6 @@ export default class Logoing extends Component {
       this.setLogoInitialPosition();
     }
   }
-  // >> LOGO POSITIONING
   setLogoInitialPosition = () => {
     // ! Are we coming from a returned state or not?
     // * If back, top and left equal to the incoming top and left,
@@ -114,12 +113,12 @@ export default class Logoing extends Component {
     );
   };
   toLogoedOrNotToLogoed = () => {
-    // const { left, top } = this.props;
+    // const { left, top } = this.state;
     // const width = window.innerWidth;
-    // const headerHeight = this.setState({ dragging: false, logoed: true });
-    console.log("TODO!");
+    // const headerHeight =
+    this.setState({ dragging: false, logoed: true });
+    // console.log("TODO!");
   };
-  // >> CAMERA USAGE
   startCamera = () => {
     navigator.mediaDevices
       .getUserMedia({

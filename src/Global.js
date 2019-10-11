@@ -24,7 +24,20 @@ const GlobalStyle = createGlobalStyle`
   .moveable-control-box {
     display: none !important;
   }
-}
+  .ReactModal__Overlay {
+    background-color: #416ff9;
+    position: absolute !important;
+    top: 5000px;
+    transition: top 400ms ease-out;
+  } 
+  .ReactModal__Overlay--after-open{
+    top: 0px;
+    transition: top 400ms ease-out;
+  }
+  .ReactModal__Overlay--before-close{
+    top: 5000px;
+    transition: top 400ms ease-out;
+  }
 `;
 
 export default GlobalStyle;

@@ -96,7 +96,7 @@ export default class Sharing extends Component {
   componentDidMount() {
     let tooltipTimer = setInterval(() => {
       this.simulateClick(this.instaTextWrapper);
-    }, 400);
+    }, 500);
     this.setState({
       tooltipTimer
     });
@@ -214,7 +214,8 @@ export default class Sharing extends Component {
           onAfterOpen={this.makeButtonEnabledFunctionPlease}
           onRequestClose={this.maybeCheckIfTheImageWasSavedYet}
           style={customStyles}
-          contentLabel='Logoed Modal'>
+          contentLabel='Logoed Modal'
+          closeTimeoutMS={400}>
           <Image src={logoedSnapshot} alt='logoed snapshot' />
           <InstructionalText>
             Save the image to your camera roll! In most browsers, giving the

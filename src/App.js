@@ -5,7 +5,7 @@ import {
   Route,
   Redirect
 } from "react-router-dom";
-import LandingPage from "./LandingPage";
+// import LandingPage from "./LandingPage";
 // import Dashboard from "./Dashboard";
 import AdminSite from "./AdminSite";
 import WebApp from "./WebApp";
@@ -95,7 +95,8 @@ class App extends Component {
               exact
               path='/'
               render={props => (
-                <LandingPage {...props} signUp={this.handleSignUp} />
+                // <LandingPage {...props} signUp={this.handleSignUp} />
+                <div>hi</div>
               )}
             />
             <Redirect to='/' />
