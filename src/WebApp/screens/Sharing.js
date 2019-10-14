@@ -84,41 +84,28 @@ export default class Sharing extends Component {
     left: null,
     snapshot: null,
     logoedSnapshot: null,
+    tooltipTimer: null,
     modalin: false,
-    ready: false,
-    tooltipTimer: null
+    ready: false
   };
   componentWillMount() {
     const { business, top, left, snapshot, logoedSnapshot } = this.props;
     this.setState({ business, top, left, snapshot, logoedSnapshot });
-    // >> THIS IS DUMB
+    // >> THIS IS DUMB, BUT IT'S HOW WE'RE DOING THINGS RIGHT NOW LOL
   }
   componentDidMount() {
+    this.copyText();
     let tooltipTimer = setInterval(() => {
       this.simulateClick(this.instaTextWrapper);
-    }, 500);
+    }, 2000);
     this.setState({
       tooltipTimer
     });
-    // this.toolTipFunctionPlease();
-    // this.copyTextFunctionPlease();
-    // this.modalOpenFunctionPlease();
-    // this.listenForLongPressPlease();
     this.simulateClick(this.instaTextWrapper);
   }
   componentWillUnmount() {
     clearInterval(this.state.tooltipTimer);
   }
-  simulateClick = el => {
-    el.current.click();
-  };
-  popModal = () => {
-    this.setState({ modalin: true });
-  };
-  dropModal = () => {
-    this.copyText();
-    this.setState({ modalin: false, ready: true });
-  };
   copyText = () => {
     const { business } = this.props;
     const captionStrings = {
@@ -135,6 +122,15 @@ export default class Sharing extends Component {
     } = captionStrings;
     const captionString = `${introBody} ${logoedMention} ${bridgeBody} ${businessMention}`;
     clipboard.writeText(`${captionString}`);
+  };
+  simulateClick = el => {
+    el.current.click();
+  };
+  popModal = () => {
+    this.setState({ modalin: true });
+  };
+  dropModal = () => {
+    this.setState({ modalin: false, ready: true });
   };
   onBack = () => {
     const { initiateBack } = this.props;
@@ -188,8 +184,8 @@ export default class Sharing extends Component {
             <ButtonText secondary>Back</ButtonText>
           </Button>
           <InformationalText style={{ maxWidth: "50vw" }}>
-            Save the image, then off to Insta! Paste the caption in to make sure
-            your entry counts!
+            Save the image, then off to Insta to post it! Paste the caption in
+            to make sure your entry counts!
           </InformationalText>
           {ready ? (
             <Button primary>
@@ -211,8 +207,8 @@ export default class Sharing extends Component {
         </ToSBar>
         <Modal
           isOpen={modalin}
-          onAfterOpen={this.makeButtonEnabledFunctionPlease}
-          onRequestClose={this.maybeCheckIfTheImageWasSavedYet}
+          onAfterOpen={this.popModal}
+          onRequestClose={this.dropModal}
           style={customStyles}
           contentLabel='Logoed Modal'
           closeTimeoutMS={400}>
